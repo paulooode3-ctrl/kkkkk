@@ -1,5 +1,5 @@
 {
-  "name": "Iris Stats Explorer",
-  "description": "Descriptive statistics analyzer for the Iris dataset with manual algorithm implementations.",
+  "name": "UniFacema - Estatística Iris",
+  "description": "Análise estatística do conjunto de dados Iris desenvolvida pela equipe da UniFacema.",
   "requestFramePermissions": []
 }
