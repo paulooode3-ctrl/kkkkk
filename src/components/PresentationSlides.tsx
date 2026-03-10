@@ -47,13 +47,13 @@ const Slide: React.FC<SlideProps> = ({ title, subtitle, children, icon: Icon }) 
 );
 
 const TEAM_MEMBERS = [
-  "CLEBERSON DIAS NASCIMENTO",
-  "KLEDYSON DANIEL CAMPOS VIANA",
-  "MARIA BIATRISSE BEZERRA FERREIRA",
-  "MARIA SARAH DA SILVA SOUSA",
-  "PAULO VICTOR SILVA CAMPOS",
-  "WEVLYNN YASMIM MORAES DE OLIVEIRA"
-].sort();
+  { name: "CLEBERSON DIAS NASCIMENTO", role: "Pesquisa e Documentação Técnica" },
+  { name: "KLEDYSON DANIEL CAMPOS VIANA", role: "Design de Interface e Experiência (UI/UX)" },
+  { name: "MARIA BIATRISSE BEZERRA FERREIRA", role: "Análise de Dados e Fórmulas Estatísticas" },
+  { name: "MARIA SARAH DA SILVA SOUSA", role: "Revisão de Código e Qualidade" },
+  { name: "PAULO VICTOR SILVA CAMPOS", role: "Líder Chave da Programação e Arquitetura" },
+  { name: "WEVLYNN YASMIM MORAES DE OLIVEIRA", role: "Organização de Dataset e Pré-processamento" }
+].sort((a, b) => a.name.localeCompare(b.name));
 
 export const PresentationSlides: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -61,8 +61,8 @@ export const PresentationSlides: React.FC<{ onClose: () => void }> = ({ onClose 
   const slides = [
     // Slide 1: Capa
     {
-      title: "Análise Estatística: Dataset Iris",
-      subtitle: "Projeto Interdisciplinar • UniFacema",
+      title: "Análise Estatística & Python",
+      subtitle: "Dataset Iris • Tutorial Completo",
       icon: Presentation,
       content: (
         <div className="flex flex-col items-center justify-center h-full text-center">
@@ -71,14 +71,14 @@ export const PresentationSlides: React.FC<{ onClose: () => void }> = ({ onClose 
             animate={{ scale: 1, opacity: 1 }}
             className="w-24 h-24 bg-zinc-900 text-white rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-zinc-200"
           >
-            <Flower2 className="w-12 h-12" />
+            <Terminal className="w-12 h-12" />
           </motion.div>
-          <h1 className="text-5xl font-black text-zinc-900 mb-4 tracking-tighter italic">IRIS ANALYTICS</h1>
-          <p className="text-zinc-500 font-mono text-sm tracking-[0.2em] uppercase">Ciência de Dados & Estatística</p>
+          <h1 className="text-5xl font-black text-zinc-900 mb-4 tracking-tighter italic">PYTHON & STATS</h1>
+          <p className="text-zinc-500 font-mono text-sm tracking-[0.2em] uppercase">Do Código à Tabela de Frequência</p>
           <div className="mt-12 flex gap-2">
-            <div className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold uppercase tracking-wider">React + TS</div>
-            <div className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Python</div>
-            <div className="px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Estatística</div>
+            <div className="px-4 py-2 bg-zinc-100 text-zinc-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Lógica Matemática</div>
+            <div className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Python Script</div>
+            <div className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Tabelas</div>
           </div>
         </div>
       )
@@ -86,259 +86,433 @@ export const PresentationSlides: React.FC<{ onClose: () => void }> = ({ onClose 
     // Slide 2: A Equipe
     {
       title: "A Equipe",
-      subtitle: "Integrantes do Grupo",
+      subtitle: "Integrantes e Funções",
       icon: Users,
       content: (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           {TEAM_MEMBERS.map((member, i) => (
             <motion.div 
-              key={member}
+              key={member.name}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="group p-6 bg-white border border-zinc-100 rounded-2xl hover:border-emerald-200 hover:bg-emerald-50/30 transition-all flex items-center gap-4"
+              className={`group p-6 bg-white border rounded-2xl transition-all flex items-center gap-4 ${
+                member.name.includes("PAULO VICTOR") 
+                ? "border-emerald-500 bg-emerald-50/30" 
+                : "border-zinc-100 hover:border-zinc-900 hover:bg-zinc-50"
+              }`}
             >
-              <div className="w-10 h-10 bg-zinc-100 rounded-full flex items-center justify-center text-zinc-400 group-hover:bg-emerald-100 group-hover:text-emerald-600 transition-colors">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                member.name.includes("PAULO VICTOR")
+                ? "bg-emerald-500 text-white"
+                : "bg-zinc-100 text-zinc-400 group-hover:bg-zinc-900 group-hover:text-white"
+              }`}>
                 <Users className="w-5 h-5" />
               </div>
-              <span className="text-sm font-bold text-zinc-700 group-hover:text-emerald-900 transition-colors uppercase tracking-tight">{member}</span>
+              <div className="flex flex-col">
+                <span className="text-sm font-bold text-zinc-900 uppercase tracking-tight">{member.name}</span>
+                <span className={`text-[10px] font-mono uppercase tracking-wider ${
+                  member.name.includes("PAULO VICTOR") ? "text-emerald-600 font-bold" : "text-zinc-400"
+                }`}>
+                  {member.role}
+                </span>
+              </div>
             </motion.div>
           ))}
         </div>
       )
     },
-    // Slide 3: Objetivo
+    // Slide 3: Objetivo do Projeto
     {
       title: "Objetivo do Projeto",
-      subtitle: "Contextualização",
-      icon: FileText,
-      content: (
-        <div className="space-y-8">
-          <div className="p-8 bg-zinc-50 rounded-3xl border border-zinc-100 italic text-xl text-zinc-600 leading-relaxed">
-            "Desenvolver uma ferramenta capaz de automatizar a análise descritiva de dados biológicos, unindo a precisão matemática à agilidade do software."
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <div className="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center font-bold">01</div>
-              <h4 className="font-bold text-zinc-900">Automação</h4>
-              <p className="text-xs text-zinc-500">Eliminar erros manuais em cálculos complexos de variância e desvio.</p>
-            </div>
-            <div className="space-y-2">
-              <div className="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center font-bold">02</div>
-              <h4 className="font-bold text-zinc-900">Visualização</h4>
-              <p className="text-xs text-zinc-500">Transformar tabelas áridas em histogramas e gráficos compreensíveis.</p>
-            </div>
-            <div className="space-y-2">
-              <div className="w-8 h-8 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center font-bold">03</div>
-              <h4 className="font-bold text-zinc-900">Educação</h4>
-              <p className="text-xs text-zinc-500">Servir como base para o ensino de estatística aplicada à computação.</p>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    // Slide 4: Interface - Dashboard
-    {
-      title: "Interface: Dashboard",
-      subtitle: "Visão Geral do Sistema",
-      icon: TrendingUp,
-      content: (
-        <div className="space-y-6">
-          <p className="text-zinc-600">A interface foi projetada seguindo princípios de <strong>Design Minimalista</strong> para focar no que importa: os dados.</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-6 bg-white border border-zinc-200 rounded-2xl">
-              <div className="flex items-center gap-3 mb-4">
-                <Calculator className="w-5 h-5 text-emerald-500" />
-                <h4 className="font-bold">Cards de Métricas</h4>
-              </div>
-              <p className="text-xs text-zinc-500 leading-relaxed">
-                Localizados no topo, exibem Média, Mediana, Variância e Desvio Padrão. Eles mudam instantaneamente conforme o filtro é aplicado.
-              </p>
-            </div>
-            <div className="p-6 bg-white border border-zinc-200 rounded-2xl">
-              <div className="flex items-center gap-3 mb-4">
-                <Filter className="w-5 h-5 text-blue-500" />
-                <h4 className="font-bold">Sistema de Filtros</h4>
-              </div>
-              <p className="text-xs text-zinc-500 leading-relaxed">
-                Permite isolar espécies (Setosa, Versicolor, Virginica) para comparar como as medidas estatísticas variam entre elas.
-              </p>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    // Slide 5: Filtros e Reatividade
-    {
-      title: "Filtros e Reatividade",
-      subtitle: "Como o App Responde",
+      subtitle: "O que estamos construindo?",
       icon: Filter,
       content: (
         <div className="space-y-6">
-          <p className="text-sm text-zinc-600">O sistema utiliza o estado do React para filtrar os 150 registros em tempo real.</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-5 bg-zinc-50 rounded-2xl border border-zinc-100">
-              <h4 className="font-bold text-xs uppercase text-zinc-400 mb-2">Estado: Atributo</h4>
-              <p className="text-xs text-zinc-600">Muda o foco entre Comprimento e Largura da Sépala ou Pétala.</p>
+          <p className="text-sm text-zinc-600 leading-relaxed">
+            Nossa missão é criar uma ferramenta que transforme dados brutos em conhecimento estatístico. Não queremos apenas o resultado, mas entender o <strong>processo matemático</strong> por trás de cada número.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 bg-zinc-50 border border-zinc-100 rounded-2xl">
+              <h4 className="font-bold text-zinc-900 text-[10px] mb-2 uppercase">Automação</h4>
+              <p className="text-[10px] text-zinc-500">Eliminar o erro humano em cálculos repetitivos.</p>
             </div>
-            <div className="p-5 bg-zinc-50 rounded-2xl border border-zinc-100">
-              <h4 className="font-bold text-xs uppercase text-zinc-400 mb-2">Estado: Espécie</h4>
-              <p className="text-xs text-zinc-600">Filtra o array original para mostrar apenas a espécie desejada ou todas.</p>
+            <div className="p-4 bg-zinc-50 border border-zinc-100 rounded-2xl">
+              <h4 className="font-bold text-zinc-900 text-[10px] mb-2 uppercase">Educação</h4>
+              <p className="text-[10px] text-zinc-500">Ensinar como a lógica de programação aplica a estatística.</p>
             </div>
-          </div>
-          <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl text-[10px] font-mono text-emerald-700">
-            {`const filteredData = data.filter(d => species === 'all' || d.species === species);`}
+            <div className="p-4 bg-zinc-50 border border-zinc-100 rounded-2xl">
+              <h4 className="font-bold text-zinc-900 text-[10px] mb-2 uppercase">Visualização</h4>
+              <p className="text-[10px] text-zinc-500">Organizar dados em tabelas claras e interpretáveis.</p>
+            </div>
           </div>
         </div>
       )
     },
-    // Slide 6: Algoritmo de Classes
+    // Slide 4: O Dataset Iris
     {
-      title: "Algoritmo de Classes",
-      subtitle: "Construindo a Tabela",
-      icon: Layers,
-      content: (
-        <div className="space-y-4">
-          <p className="text-sm text-zinc-600">Para criar a tabela agrupada, seguimos 4 passos lógicos no código:</p>
-          <div className="space-y-2">
-            {[
-              { t: "Amplitude Total", d: "Subtraímos o menor valor do maior (Máx - Mín)." },
-              { t: "Número de Classes", d: "Aplicamos a Regra de Sturges para definir 'k'." },
-              { t: "Intervalo de Classe", d: "Dividimos a Amplitude pelo número de classes." },
-              { t: "Distribuição", d: "Percorremos os dados e contamos quantos caem em cada intervalo." }
-            ].map((step, i) => (
-              <div key={i} className="flex gap-4 p-3 bg-white border border-zinc-100 rounded-xl items-center">
-                <div className="w-6 h-6 bg-zinc-900 text-white text-[10px] font-bold rounded-full flex items-center justify-center shrink-0">{i+1}</div>
-                <div>
-                  <h5 className="font-bold text-xs text-zinc-900">{step.t}</h5>
-                  <p className="text-[10px] text-zinc-500">{step.d}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )
-    },
-    // Slide 7: Tabelas de Frequência
-    {
-      title: "Tabelas de Frequência",
-      subtitle: "Organização e Sturges",
-      icon: TableIcon,
+      title: "O Dataset Iris",
+      subtitle: "Contexto dos Dados",
+      icon: Flower2,
       content: (
         <div className="space-y-6">
-          <div className="p-6 bg-zinc-900 text-white rounded-3xl">
-            <h4 className="text-emerald-400 font-mono text-sm mb-4">Regra de Sturges (Cálculo de Classes)</h4>
-            <div className="flex items-center justify-center py-6 bg-zinc-800 rounded-xl mb-4">
-              <code className="text-2xl font-mono">k = 1 + 3.322 * log10(n)</code>
-            </div>
-            <p className="text-xs text-zinc-400">
-              Onde <strong>n</strong> é o número de amostras (150 no Iris). Essa fórmula define quantas "gavetas" (classes) usaremos para agrupar os dados contínuos.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100">
-              <h5 className="font-bold text-xs uppercase mb-1">Frequência Absoluta (fi)</h5>
-              <p className="text-[10px] text-zinc-500">Contagem de vezes que um valor ou classe aparece.</p>
-            </div>
-            <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100">
-              <h5 className="font-bold text-xs uppercase mb-1">Frequência Relativa (fri)</h5>
-              <p className="text-[10px] text-zinc-500">Percentual daquela classe em relação ao todo.</p>
+          <p className="text-sm text-zinc-600 leading-relaxed">
+            O conjunto de dados <strong>Iris</strong> é um dos mais famosos na estatística. Ele contém 150 amostras de três espécies de flores Iris. Para este projeto, focamos na variável quantitativa contínua: <strong>Comprimento da Sépala</strong>.
+          </p>
+          <div className="p-6 bg-zinc-50 rounded-2xl border border-zinc-100">
+            <h4 className="font-bold text-zinc-900 mb-4 text-xs uppercase tracking-widest">Estrutura do Arquivo CSV:</h4>
+            <div className="p-4 bg-white border border-zinc-200 rounded-xl font-mono text-[10px] text-zinc-500">
+              sepal_length,sepal_width,petal_length,petal_width,species<br/>
+              5.1,3.5,1.4,0.2,setosa<br/>
+              4.9,3.0,1.4,0.2,setosa<br/>
+              ...
             </div>
           </div>
         </div>
       )
     },
-    // Slide 6: O Código - Processamento
+    // Slide 5: Por que Python Nativo?
     {
-      title: "O Código: Processamento",
-      subtitle: "Tratamento de Dados em TypeScript",
+      title: "Por que Python Nativo?",
+      subtitle: "Lógica Pura vs Bibliotecas",
       icon: Code2,
       content: (
         <div className="space-y-6">
-          <div className="p-6 bg-[#1e1e1e] rounded-2xl overflow-hidden">
-            <h4 className="text-blue-400 font-mono text-xs mb-4">// Estrutura de Dados (Interface)</h4>
-            <pre className="text-zinc-300 font-mono text-[10px] leading-relaxed">
-{`interface IrisRecord {
-  sepalLength: number;
-  sepalWidth: number;
-  petalLength: number;
-  petalWidth: number;
-  species: 'setosa' | 'versicolor' | 'virginica';
-}
-
-// O dataset é carregado de um arquivo CSV e 
-// convertido em um array de objetos tipados.`}
-            </pre>
-          </div>
+          <p className="text-sm text-zinc-600 leading-relaxed">
+            Poderíamos usar bibliotecas como <code>Pandas</code> ou <code>Numpy</code>, que fazem tudo em uma linha. No entanto, o objetivo deste trabalho é <strong>ensinar a lógica</strong>.
+          </p>
           <div className="p-6 bg-amber-50 border border-amber-100 rounded-2xl">
-            <h4 className="font-bold text-amber-900 text-sm mb-2">Por que TypeScript?</h4>
-            <p className="text-xs text-amber-700">
-              O uso de interfaces garante que não tentaremos calcular a média de um campo que não existe ou que contém texto, evitando bugs em tempo de execução.
-            </p>
+            <ul className="space-y-3">
+              <li className="flex items-start gap-3 text-xs text-amber-800">
+                <Check className="w-4 h-4 mt-0.5 shrink-0" />
+                <span><strong>Transparência:</strong> Você vê como a soma e a divisão acontecem.</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs text-amber-800">
+                <Check className="w-4 h-4 mt-0.5 shrink-0" />
+                <span><strong>Portabilidade:</strong> O código roda em qualquer computador com Python instalado, sem precisar baixar nada extra.</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs text-amber-800">
+                <Check className="w-4 h-4 mt-0.5 shrink-0" />
+                <span><strong>Aprendizado:</strong> Desenvolve o raciocínio algorítmico do programador.</span>
+              </li>
+            </ul>
           </div>
         </div>
       )
     },
-    // Slide 7: O Código - Lógica Estatística
+    // Slide 6: Estrutura: Importações
     {
-      title: "O Código: Lógica Estatística",
-      subtitle: "Algoritmos de Cálculo",
-      icon: Calculator,
-      content: (
-        <div className="space-y-4">
-          <div className="p-6 bg-zinc-900 rounded-2xl">
-            <h4 className="text-emerald-400 font-mono text-xs mb-4">// Cálculo da Variância Amostral</h4>
-            <pre className="text-zinc-300 font-mono text-[10px] leading-relaxed">
-{`const variance = useMemo(() => {
-  if (data.length < 2) return 0;
-  const avg = mean; // Média já calculada
-  const squareDiffs = data.map(v => Math.pow(v - avg, 2));
-  const sumSquareDiffs = squareDiffs.reduce((a, b) => a + b, 0);
-  return sumSquareDiffs / (data.length - 1);
-}, [data, mean]);`}
-            </pre>
-          </div>
-          <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100">
-            <p className="text-xs text-zinc-500">
-              Utilizamos o hook <strong>useMemo</strong> do React para que os cálculos só sejam refeitos se os dados ou filtros mudarem, garantindo alta performance.
-            </p>
-          </div>
-        </div>
-      )
-    },
-    // Slide 8: O Código - Visualização
-    {
-      title: "O Código: Visualização",
-      subtitle: "Gráficos com Recharts",
-      icon: BarChart3,
+      title: "Estrutura: Importações",
+      subtitle: "As Ferramentas Básicas",
+      icon: Code2,
       content: (
         <div className="space-y-6">
-          <div className="flex items-center gap-6">
-            <div className="flex-1 space-y-4">
-              <p className="text-sm text-zinc-600">
-                Para o histograma, mapeamos as classes da tabela de frequência para um formato que a biblioteca <strong>Recharts</strong> entenda.
-              </p>
-              <ul className="text-xs text-zinc-500 space-y-2 list-disc list-inside">
-                <li>Eixo X: Intervalos de Classe</li>
-                <li>Eixo Y: Frequência Absoluta (fi)</li>
-                <li>Tooltip: Detalhes ao passar o mouse</li>
-              </ul>
+          <p className="text-sm text-zinc-600">O Python já vem com "baterias incluídas". Usamos dois módulos fundamentais:</p>
+          <div className="p-6 bg-[#1e1e1e] rounded-2xl border border-white/5">
+            <pre className="text-emerald-400 font-mono text-sm leading-relaxed">
+{`import math  # Para logaritmos e raiz quadrada
+import csv   # Para ler o arquivo de dados`}
+            </pre>
+          </div>
+          <div className="space-y-2">
+            <p className="text-[10px] text-zinc-500"><strong>math.log10:</strong> Usado na Regra de Sturges.</p>
+            <p className="text-[10px] text-zinc-500"><strong>csv.DictReader:</strong> Transforma cada linha do CSV em um dicionário fácil de manipular.</p>
+          </div>
+        </div>
+      )
+    },
+    // Slide 7: Leitura do CSV
+    {
+      title: "Leitura do CSV",
+      subtitle: "O Context Manager",
+      icon: FileText,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">Abrir um arquivo exige cuidado. Se o programa travar e o arquivo continuar aberto, ele pode ser corrompido. O <code>with</code> resolve isso:</p>
+          <div className="p-6 bg-[#1e1e1e] rounded-2xl border border-white/5">
+            <pre className="text-zinc-300 font-mono text-[10px] leading-relaxed">
+{`dados = []
+with open('iris.csv', 'r') as f:
+    leitor = csv.DictReader(f)
+    for linha in leitor:
+        # Extraímos apenas a coluna que queremos
+        valor = float(linha['sepal_length'])
+        dados.append(valor)`}
+            </pre>
+          </div>
+          <p className="text-[10px] text-zinc-500 italic">
+            Aqui, o Python lê linha por linha, converte o texto para número e guarda na lista <code>dados</code>.
+          </p>
+        </div>
+      )
+    },
+    // Slide 8: Processamento e Limpeza
+    {
+      title: "Processamento e Limpeza",
+      subtitle: "Garantindo a Qualidade",
+      icon: Filter,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">Dados reais podem ter erros. Antes de calcular, precisamos garantir que temos apenas números válidos e ordenados para a mediana.</p>
+          <div className="p-6 bg-[#1e1e1e] rounded-2xl border border-white/5">
+            <pre className="text-emerald-400 font-mono text-[10px] leading-relaxed">
+{`# Ordenar os dados é CRUCIAL para a mediana e tabelas
+dados.sort()
+
+n = len(dados)
+minimo = dados[0]
+maximo = dados[-1]`}
+            </pre>
+          </div>
+          <div className="p-4 bg-zinc-50 border border-zinc-100 rounded-xl">
+            <p className="text-[10px] text-zinc-500">Ao ordenar a lista, facilitamos encontrar o menor valor (índice 0) e o maior valor (último índice).</p>
+          </div>
+        </div>
+      )
+    },
+    // Slide 9: Cálculo da Média
+    {
+      title: "Cálculo da Média",
+      subtitle: "Lógica Matemática",
+      icon: Calculator,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">A média aritmética é a soma de todos os valores dividida pela quantidade. No código, usamos as funções nativas <code>sum()</code> e <code>len()</code>.</p>
+          <div className="p-6 bg-zinc-900 text-white rounded-2xl text-center">
+            <p className="text-3xl font-mono">Média = Σx / n</p>
+          </div>
+          <div className="p-6 bg-[#1e1e1e] rounded-2xl border border-white/5">
+            <pre className="text-emerald-400 font-mono text-[10px]">
+{`def calcular_media(lista):
+    soma = sum(lista)
+    total = len(lista)
+    return soma / total`}
+            </pre>
+          </div>
+          <p className="text-[10px] text-zinc-500">Para o Iris, somamos os 150 comprimentos e dividimos por 150.</p>
+        </div>
+      )
+    },
+    // Slide 10: Cálculo da Mediana
+    {
+      title: "Cálculo da Mediana",
+      subtitle: "Ordenação e Meio",
+      icon: Calculator,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">A mediana é o valor central. Se o número de elementos for par, tiramos a média dos dois centrais.</p>
+          <div className="p-6 bg-[#1e1e1e] rounded-2xl border border-white/5">
+            <pre className="text-emerald-400 font-mono text-[10px] leading-relaxed">
+{`def calcular_mediana(lista):
+    n = len(lista)
+    meio = n // 2
+    if n % 2 == 0:
+        return (lista[meio-1] + lista[meio]) / 2
+    else:
+        return lista[meio]`}
+            </pre>
+          </div>
+          <p className="text-[10px] text-zinc-500">
+            <strong>Importante:</strong> A lista DEVE estar ordenada antes deste cálculo.
+          </p>
+        </div>
+      )
+    },
+    // Slide 11: Cálculo da Moda
+    {
+      title: "Cálculo da Moda",
+      subtitle: "Dicionários de Frequência",
+      icon: Calculator,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">A moda é o valor mais frequente. Usamos um dicionário para contar as ocorrências de cada número.</p>
+          <div className="p-6 bg-[#1e1e1e] rounded-2xl border border-white/5">
+            <pre className="text-emerald-400 font-mono text-[10px] leading-relaxed">
+{`def calcular_moda(lista):
+    frequencias = {}
+    for x in lista:
+        frequencias[x] = frequencias.get(x, 0) + 1
+    
+    max_f = max(frequencias.values())
+    modas = [k for k, v in frequencias.items() if v == max_f]
+    return modas`}
+            </pre>
+          </div>
+          <p className="text-[10px] text-zinc-500 italic">
+            Se houver empate, o código retorna uma lista com todas as modas (bimodal, trimodal, etc).
+          </p>
+        </div>
+      )
+    },
+    // Slide 12: Variância e Desvio Padrão
+    {
+      title: "Variância e Desvio Padrão",
+      subtitle: "Medindo a Dispersão",
+      icon: TrendingUp,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">O desvio padrão nos diz o quão "espalhados" os dados estão da média. É a raiz quadrada da variância.</p>
+          <div className="p-6 bg-zinc-900 text-white rounded-2xl text-center">
+            <p className="text-2xl font-mono">s = √[ Σ(x - x̄)² / (n - 1) ]</p>
+          </div>
+          <div className="p-6 bg-[#1e1e1e] rounded-2xl border border-white/5">
+            <pre className="text-emerald-400 font-mono text-[10px]">
+{`def calcular_desvio_padrao(lista, media):
+    soma_quadrados = sum((x - media)**2 for x in lista)
+    variancia = soma_quadrados / (len(lista) - 1)
+    return math.sqrt(variancia)`}
+            </pre>
+          </div>
+        </div>
+      )
+    },
+    // Slide 13: Tabela Não Agrupada: Lógica
+    {
+      title: "Tabela Não Agrupada",
+      subtitle: "Frequência Simples",
+      icon: TableIcon,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">Nesta tabela, contamos cada valor individual. É útil para ver a distribuição exata de cada medida.</p>
+          <div className="p-6 bg-[#1e1e1e] rounded-2xl border border-white/5">
+            <pre className="text-emerald-400 font-mono text-[10px] leading-relaxed">
+{`# Lógica em Python:
+contagem = {}
+for x in dados:
+    contagem[x] = contagem.get(x, 0) + 1
+
+for valor in sorted(contagem.keys()):
+    fi = contagem[valor]
+    fri = (fi / n) * 100
+    print(f"{valor} | {fi} | {fri:.2f}%")`}
+            </pre>
+          </div>
+          <p className="text-[10px] text-zinc-500">No Iris, temos muitos valores decimais, o que torna essa tabela muito longa. Por isso, usamos o agrupamento.</p>
+        </div>
+      )
+    },
+    // Slide 14: Preparação: Amplitude
+    {
+      title: "Preparação: Amplitude",
+      subtitle: "O Espaço dos Dados",
+      icon: TrendingUp,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">A Amplitude Total (AT) define o "tamanho" do nosso intervalo de estudo. É a diferença entre o maior e o menor valor.</p>
+          <div className="p-8 bg-zinc-50 rounded-3xl border border-zinc-100 text-center">
+            <h4 className="text-zinc-400 font-mono text-[10px] uppercase mb-4">Cálculo de AT</h4>
+            <p className="text-4xl font-mono text-zinc-900">AT = Xmax - Xmin</p>
+            <p className="text-xl font-mono text-zinc-400 mt-2">AT = 7.9 - 4.3 = 3.6</p>
+          </div>
+          <div className="p-4 bg-zinc-900 text-emerald-400 rounded-xl font-mono text-[10px]">
+            <p>at = max(dados) - min(dados)</p>
+          </div>
+        </div>
+      )
+    },
+    // Slide 15: Regra de Sturges
+    {
+      title: "Regra de Sturges",
+      subtitle: "Definindo o Número de Classes",
+      icon: Layers,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">Quantas linhas nossa tabela deve ter? A Regra de Sturges usa logaritmos para encontrar um número equilibrado de classes (k).</p>
+          <div className="p-6 bg-zinc-900 text-white rounded-3xl">
+            <div className="flex items-center justify-center py-6 bg-zinc-800 rounded-xl mb-4">
+              <code className="text-2xl font-mono">k = 1 + 3.322 * log10(n)</code>
             </div>
-            <div className="w-48 h-48 bg-zinc-50 rounded-2xl border border-dashed border-zinc-300 flex items-center justify-center">
-              <BarChart3 className="w-12 h-12 text-zinc-300" />
+            <div className="p-4 bg-zinc-800/50 rounded-xl">
+              <pre className="text-emerald-400 font-mono text-[10px]">
+{`# n = 150 amostras
+k = 1 + 3.322 * math.log10(150)
+k = round(k)  # Resulta em 8 ou 9 classes`}
+              </pre>
             </div>
           </div>
         </div>
       )
     },
-    // Slide 9: Terminal - Python Script
+    // Slide 16: Intervalo de Classe (h)
     {
-      title: "Terminal: Script Python",
-      subtitle: "Análise via Linha de Comando",
+      title: "Intervalo de Classe (h)",
+      subtitle: "Largura da Classe",
+      icon: TableIcon,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">O intervalo (h) é a largura de cada classe. Dividimos a amplitude total pelo número de classes.</p>
+          <div className="p-8 bg-zinc-50 rounded-3xl border border-zinc-100 text-center">
+            <h4 className="text-zinc-400 font-mono text-[10px] uppercase mb-4">Cálculo de h</h4>
+            <p className="text-4xl font-mono text-zinc-900">h = AT / k</p>
+            <p className="text-xl font-mono text-zinc-400 mt-2">h = 3.6 / 9 = 0.4</p>
+          </div>
+          <p className="text-[10px] text-zinc-500 italic text-center">
+            Cada linha da nossa tabela vai "pular" de 0.4 em 0.4.
+          </p>
+        </div>
+      )
+    },
+    // Slide 17: Construção da Tabela Agrupada
+    {
+      title: "Construção da Tabela",
+      subtitle: "Loops e Condicionais",
+      icon: TableIcon,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">Para preencher a tabela, percorremos os dados e verificamos em qual "gaveta" (intervalo) cada valor se encaixa.</p>
+          <div className="p-6 bg-[#1e1e1e] rounded-2xl border border-white/5">
+            <pre className="text-emerald-400 font-mono text-[10px] leading-relaxed">
+{`# Lógica do Agrupamento:
+limite_inf = min(dados)
+for i in range(k):
+    limite_sup = limite_inf + h
+    # Contar quantos estão entre inf e sup
+    fi = len([x for x in dados if limite_inf <= x < limite_sup])
+    # Se for a última classe, inclui o limite superior
+    if i == k - 1:
+        fi = len([x for x in dados if limite_inf <= x <= limite_sup])
+    
+    print(f"{limite_inf:.2f} |--- {limite_sup:.2f} | {fi}")
+    limite_inf = limite_sup`}
+            </pre>
+          </div>
+        </div>
+      )
+    },
+    // Slide 18: Ponto Médio e Estimativas
+    {
+      title: "Ponto Médio e Estimativas",
+      subtitle: "Representante da Classe",
+      icon: Layers,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">O Ponto Médio (xi) é o valor central de uma classe. Ele é usado para estimar a média quando não temos os dados originais.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-6 bg-zinc-50 border border-zinc-100 rounded-2xl text-center">
+              <h4 className="text-zinc-400 font-mono text-[10px] uppercase mb-2">Ponto Médio</h4>
+              <p className="text-xl font-mono">xi = (Inf + Sup) / 2</p>
+            </div>
+            <div className="p-6 bg-zinc-50 border border-zinc-100 rounded-2xl text-center">
+              <h4 className="text-zinc-400 font-mono text-[10px] uppercase mb-2">Média Agrupada</h4>
+              <p className="text-xl font-mono">Σ(xi * fi) / n</p>
+            </div>
+          </div>
+          <div className="p-4 bg-zinc-900 text-zinc-400 rounded-xl font-mono text-[10px]">
+            <p># No código:</p>
+            <p>xi = (limite_inf + limite_sup) / 2</p>
+            <p>soma_agrupada += xi * fi</p>
+          </div>
+        </div>
+      )
+    },
+    // Slide 19: Execução no Terminal
+    {
+      title: "Execução no Terminal",
+      subtitle: "O Script em Ação",
       icon: Terminal,
       content: (
         <div className="space-y-4">
-          <p className="text-sm text-zinc-600">O script Python foi desenvolvido para ser uma alternativa leve e rápida ao dashboard web.</p>
+          <p className="text-sm text-zinc-600">Ao rodar o script, o terminal exibe o relatório completo. É a prova de que nossa lógica matemática foi traduzida corretamente para o computador.</p>
           <div className="p-6 bg-[#0c0c0c] rounded-2xl border border-white/10 shadow-2xl">
             <div className="flex gap-1.5 mb-4">
               <div className="w-2 h-2 rounded-full bg-rose-500" />
@@ -346,109 +520,41 @@ export const PresentationSlides: React.FC<{ onClose: () => void }> = ({ onClose 
               <div className="w-2 h-2 rounded-full bg-emerald-500" />
             </div>
             <pre className="text-emerald-500 font-mono text-[10px] leading-relaxed">
-{`# terminal_stats.py
-import csv
-
-def load_data(filename):
-    with open(filename, 'r') as f:
-        return list(csv.DictReader(f))
-
-# O script processa o CSV, converte strings para float
-# e aplica as mesmas fórmulas de Média e Desvio Padrão.`}
+{`$ python iris_analysis.py
+------------------------------------
+RESULTADOS: SEPAL_LENGTH
+------------------------------------
+Média: 5.84 | Mediana: 5.80 | Moda: [5.0]
+Desvio Padrão: 0.83
+------------------------------------
+TABELA DE FREQUÊNCIA (STURGES)
+9 Classes geradas com sucesso.
+------------------------------------`}
             </pre>
           </div>
         </div>
       )
     },
-    // Slide 10: Terminal - Execução
-    {
-      title: "Terminal: Execução",
-      subtitle: "Resultados no Console",
-      icon: Terminal,
-      content: (
-        <div className="space-y-6">
-          <p className="text-sm text-zinc-600">Ao executar o comando <code className="bg-zinc-100 px-2 py-0.5 rounded text-zinc-900">python stats.py</code>, o terminal exibe:</p>
-          <div className="p-6 bg-zinc-900 rounded-2xl font-mono text-[10px] text-zinc-300 space-y-2">
-            <p className="text-zinc-500">$ python stats.py --species setosa</p>
-            <p className="text-emerald-400">{">>>"} Carregando 50 registros de 'setosa'...</p>
-            <p>------------------------------------</p>
-            <p>MÉDIA: 5.006</p>
-            <p>MEDIANA: 5.0</p>
-            <p>VARIÂNCIA: 0.124</p>
-            <p>DESVIO PADRÃO: 0.352</p>
-            <p>------------------------------------</p>
-            <p className="text-blue-400">{">>>"} Análise concluída com sucesso.</p>
-          </div>
-        </div>
-      )
-    },
-    // Slide 13: Python - Algoritmos Manuais
-    {
-      title: "Python: Algoritmos Manuais",
-      subtitle: "Lógica Pura",
-      icon: Terminal,
-      content: (
-        <div className="space-y-4">
-          <p className="text-sm text-zinc-600">No Python, evitamos o uso de bibliotecas como NumPy para demonstrar o entendimento matemático.</p>
-          <div className="p-6 bg-zinc-900 rounded-2xl">
-            <pre className="text-emerald-400 font-mono text-[10px] leading-relaxed">
-{`# Cálculo da Média Manual
-def media(lista):
-    return sum(lista) / len(lista)
-
-# Cálculo do Desvio Padrão
-def desvio_padrao(lista):
-    m = media(lista)
-    variancia = sum((x - m)**2 for x in lista) / (len(lista) - 1)
-    return variancia ** 0.5`}
-            </pre>
-          </div>
-        </div>
-      )
-    },
-    // Slide 14: Tecnologias Utilizadas
-    {
-      title: "Tecnologias Utilizadas",
-      subtitle: "Stack de Desenvolvimento",
-      icon: Layers,
-      content: (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {[
-            { n: "React 18", d: "Interface Reativa", c: "bg-blue-50 text-blue-600" },
-            { n: "TypeScript", d: "Segurança de Tipos", c: "bg-blue-100 text-blue-700" },
-            { n: "Tailwind CSS", d: "Estilização Moderna", c: "bg-emerald-50 text-emerald-600" },
-            { n: "Framer Motion", d: "Animações Fluídas", c: "bg-rose-50 text-rose-600" },
-            { n: "Recharts", d: "Gráficos Dinâmicos", c: "bg-amber-50 text-amber-600" },
-            { n: "Python 3", d: "Scripts de Terminal", c: "bg-zinc-900 text-zinc-100" }
-          ].map((tech, i) => (
-            <div key={i} className={`p-4 rounded-2xl border border-transparent hover:border-zinc-200 transition-all ${tech.c}`}>
-              <h5 className="font-bold text-xs mb-1">{tech.n}</h5>
-              <p className="text-[10px] opacity-80">{tech.d}</p>
-            </div>
-          ))}
-        </div>
-      )
-    },
-    // Slide 15: Conclusão
+    // Slide 20: Conclusão
     {
       title: "Conclusão",
-      subtitle: "Encerramento",
-      icon: Users,
+      subtitle: "Encerramento do Projeto",
+      icon: Check,
       content: (
         <div className="flex flex-col items-center justify-center h-full text-center space-y-8">
-          <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
+          <div className="w-20 h-20 bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-emerald-200">
             <Check className="w-10 h-10" />
           </div>
           <div className="max-w-xl">
-            <h3 className="text-2xl font-bold text-zinc-900 mb-4">Trabalho Concluído</h3>
-            <p className="text-zinc-600 leading-relaxed">
-              Este projeto demonstrou que a estatística não é apenas sobre números, mas sobre a capacidade de construir ferramentas que tornam a informação acessível e útil.
+            <h3 className="text-2xl font-bold text-zinc-900 mb-4 tracking-tight uppercase">Missão Cumprida</h3>
+            <p className="text-zinc-600 leading-relaxed text-sm">
+              Demonstramos que a estatística não é apenas sobre fórmulas, mas sobre como organizamos a informação para tomar decisões. Com Python, transformamos 150 linhas de texto em uma análise clara e precisa.
             </p>
           </div>
           <div className="pt-8 border-t border-zinc-100 w-full">
-            <p className="text-zinc-400 font-serif italic mb-4">Obrigado pela atenção!</p>
+            <p className="text-zinc-400 font-mono text-[10px] uppercase tracking-widest mb-4">Liderança de Programação: Paulo Victor</p>
             <div className="flex justify-center gap-4">
-              <div className="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center"><Flower2 className="w-4 h-4 text-zinc-400" /></div>
+              <div className="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center"><Calculator className="w-4 h-4 text-zinc-400" /></div>
               <div className="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center"><Code2 className="w-4 h-4 text-zinc-400" /></div>
               <div className="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center"><Terminal className="w-4 h-4 text-zinc-400" /></div>
             </div>
