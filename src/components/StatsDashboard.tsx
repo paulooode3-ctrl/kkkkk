@@ -273,11 +273,17 @@ const StatsDashboard: React.FC = () => {
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 60, opacity: 0, scale: 0.95 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { type: 'spring', stiffness: 100 }
+      scale: 1,
+      transition: { 
+        type: 'spring', 
+        stiffness: 80, 
+        damping: 15,
+        duration: 0.6
+      }
     }
   };
 
@@ -380,18 +386,6 @@ const StatsDashboard: React.FC = () => {
                     Slides
                   </button>
                   <button
-                    onClick={() => setShowIntro(true)}
-                    className="px-3 py-1.5 hover:bg-zinc-50 text-zinc-400 rounded-lg text-[10px] font-bold uppercase tracking-wider border border-transparent hover:border-zinc-200 transition-all"
-                  >
-                    Intro
-                  </button>
-                  <button
-                    onClick={() => setShowTeam(true)}
-                    className="px-3 py-1.5 hover:bg-zinc-50 text-zinc-600 rounded-lg text-[10px] font-bold uppercase tracking-wider border border-zinc-200 transition-colors"
-                  >
-                    Equipe
-                  </button>
-                  <button
                     onClick={() => setShowCode(true)}
                     className="px-3 py-1.5 bg-zinc-900 text-white rounded-lg text-[10px] font-bold uppercase tracking-wider transition-colors"
                   >
@@ -481,7 +475,7 @@ const StatsDashboard: React.FC = () => {
 
                   <div className="h-[300px] w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={groupedTable}>
+                      <BarChart data={groupedTable} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f4f4f5" />
                         <XAxis 
                           dataKey="label" 
@@ -490,6 +484,7 @@ const StatsDashboard: React.FC = () => {
                           tick={{fill: '#71717a'}}
                           axisLine={false}
                           tickLine={false}
+                          dy={10}
                         />
                         <YAxis 
                           fontSize={9} 
@@ -499,19 +494,35 @@ const StatsDashboard: React.FC = () => {
                           tickLine={false}
                         />
                         <Tooltip 
-                          cursor={{ fill: '#f4f4f5' }}
-                          contentStyle={{ 
-                            backgroundColor: '#fff', 
-                            border: '1px solid #e4e4e7',
-                            borderRadius: '8px',
-                            fontSize: '11px',
-                            fontFamily: 'JetBrains Mono'
+                          cursor={{ fill: '#f8fafc', radius: 8 }}
+                          content={({ active, payload }) => {
+                            if (active && payload && payload.length) {
+                              const data = payload[0].payload;
+                              return (
+                                <div className="bg-white p-4 border border-zinc-200 shadow-xl rounded-2xl">
+                                  <p className="text-[10px] font-mono text-zinc-400 uppercase mb-2">Classe: {data.label}</p>
+                                  <div className="flex items-center gap-4">
+                                    <div className="flex flex-col">
+                                      <span className="text-2xl font-mono font-bold text-zinc-900">{data.fi}</span>
+                                      <span className="text-[9px] text-zinc-400 uppercase font-bold">Frequência</span>
+                                    </div>
+                                    <div className="w-px h-8 bg-zinc-100" />
+                                    <div className="flex flex-col">
+                                      <span className="text-2xl font-mono font-bold text-zinc-900">{(data.fri * 100).toFixed(1)}%</span>
+                                      <span className="text-[9px] text-zinc-400 uppercase font-bold">Relativa</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            }
+                            return null;
                           }}
                         />
                         <Bar 
                           dataKey="fi" 
                           fill="#18181b" 
                           radius={[4, 4, 0, 0]}
+                          barSize={40}
                         />
                       </BarChart>
                     </ResponsiveContainer>
@@ -520,21 +531,43 @@ const StatsDashboard: React.FC = () => {
 
                 <motion.section 
                   variants={itemVariants}
-                  className="bg-zinc-50 rounded-xl p-6 border border-zinc-200"
+                  className="bg-zinc-50/50 rounded-2xl p-6 border border-zinc-200"
                 >
-                  <h2 className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-6">Estimativas Agrupadas</h2>
-                  <div className="space-y-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Estimativas Agrupadas</h2>
+                    <div className="group relative">
+                      <Calculator className="w-4 h-4 text-zinc-300 cursor-help" />
+                      <div className="absolute right-0 top-6 w-48 p-3 bg-zinc-900 text-white text-[9px] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none shadow-xl leading-relaxed">
+                        Valores aproximados baseados nos pontos médios das classes. Podem divergir dos valores exatos.
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
                     {[
-                      { label: 'Média', value: groupedStats.mean },
-                      { label: 'Mediana', value: groupedStats.median },
-                      { label: 'Variância', value: groupedStats.variance },
-                      { label: 'Desvio Padrão', value: groupedStats.stdDev }
+                      { label: 'Média', value: groupedStats.mean, icon: Calculator, color: 'text-emerald-600' },
+                      { label: 'Mediana', value: groupedStats.median, icon: TrendingUp, color: 'text-blue-600' },
+                      { label: 'Variância', value: groupedStats.variance, icon: Layers, color: 'text-amber-600' },
+                      { label: 'Desvio Padrão', value: groupedStats.stdDev, icon: BarChart3, color: 'text-rose-600' }
                     ].map((stat) => (
-                      <div key={stat.label}>
-                        <p className="text-[9px] uppercase font-bold text-zinc-400 tracking-wider mb-1">{stat.label}</p>
-                        <p className="text-2xl font-mono font-bold text-zinc-900">{stat.value.toFixed(4)}</p>
+                      <div key={stat.label} className="flex items-center justify-between p-3 bg-white rounded-xl border border-zinc-100 shadow-sm">
+                        <div className="flex items-center gap-3">
+                          <div className={`p-2 rounded-lg bg-zinc-50 ${stat.color}`}>
+                            <stat.icon className="w-3 h-3" />
+                          </div>
+                          <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-tight">{stat.label}</span>
+                        </div>
+                        <span className="text-lg font-mono font-bold text-zinc-900 tracking-tighter">
+                          {stat.value.toFixed(4)}
+                        </span>
                       </div>
                     ))}
+                  </div>
+
+                  <div className="mt-6 p-3 bg-blue-50/50 rounded-xl border border-blue-100/50">
+                    <p className="text-[9px] text-blue-700 leading-relaxed italic">
+                      * A diferença ocorre porque o agrupamento assume que os dados estão no centro de cada classe.
+                    </p>
                   </div>
                 </motion.section>
               </div>
@@ -689,44 +722,44 @@ const StatsDashboard: React.FC = () => {
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
           >
             <motion.div
-              initial={{ scale: 0.9, y: 20 }}
+              initial={{ scale: 0.9, y: 40 }}
               animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              className="bg-[#1e1e1e] w-full max-w-4xl rounded-[2rem] overflow-hidden shadow-2xl border border-white/10"
+              exit={{ scale: 0.9, y: 40 }}
+              className="bg-[#2a2a2a] w-full max-w-4xl rounded-[2rem] overflow-hidden shadow-2xl border border-white/10"
             >
-              <div className="p-6 border-b border-white/10 flex justify-between items-center bg-[#252525]">
+              <div className="p-6 border-b border-white/10 flex justify-between items-center bg-[#333333]">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-emerald-500/10">
+                  <div className="p-2 rounded-lg bg-emerald-500/20">
                     <Terminal className="w-5 h-5 text-emerald-400" />
                   </div>
                   <div>
                     <h3 className="text-white font-bold text-sm">Implementação Python</h3>
-                    <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Algoritmos Manuais • iris_stats.py</p>
+                    <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Algoritmos Manuais • iris_stats.py</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleCopy}
-                    className="p-2 hover:bg-white/5 rounded-lg transition-colors text-zinc-400 hover:text-white flex items-center gap-2 text-xs font-mono"
+                    className="p-2 hover:bg-white/10 rounded-lg transition-colors text-zinc-300 hover:text-white flex items-center gap-2 text-xs font-mono"
                   >
                     {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                     {copied ? 'Copiado!' : 'Copiar'}
                   </button>
                   <button
                     onClick={() => setShowCode(false)}
-                    className="p-2 hover:bg-white/5 rounded-lg transition-colors text-zinc-400 hover:text-white"
+                    className="p-2 hover:bg-white/10 rounded-lg transition-colors text-zinc-300 hover:text-white"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
               </div>
-              <div className="p-8 overflow-auto max-h-[70vh] custom-scrollbar bg-[#1e1e1e]">
-                <pre className="font-mono text-sm text-emerald-400/90 leading-relaxed">
+              <div className="p-8 overflow-auto max-h-[70vh] custom-scrollbar bg-[#2a2a2a]">
+                <pre className="font-mono text-sm text-emerald-300 leading-relaxed">
                   <code>{PYTHON_CODE}</code>
                 </pre>
               </div>
-              <div className="p-4 bg-[#252525] border-t border-white/10 text-center">
-                <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+              <div className="p-4 bg-[#333333] border-t border-white/10 text-center">
+                <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">
                   UniFacema • Construção de Algoritmos • TDE
                 </p>
               </div>

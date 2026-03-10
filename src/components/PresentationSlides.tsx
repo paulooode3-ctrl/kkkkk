@@ -28,19 +28,19 @@ interface SlideProps {
 
 const Slide: React.FC<SlideProps> = ({ title, subtitle, children, icon: Icon }) => (
   <motion.div
-    initial={{ opacity: 0, x: 20 }}
+    initial={{ opacity: 0, x: 40 }}
     animate={{ opacity: 1, x: 0 }}
-    exit={{ opacity: 0, x: -20 }}
-    className="h-full flex flex-col p-8 md:p-12"
+    exit={{ opacity: 0, x: -40 }}
+    className="h-full flex flex-col p-10 md:p-16"
   >
-    <div className="mb-10">
-      <div className="flex items-center gap-4 mb-2">
-        {Icon && <Icon className="w-6 h-6 text-zinc-400" />}
-        <h2 className="text-3xl md:text-4xl font-bold text-zinc-900 tracking-tight">{title}</h2>
+    <div className="mb-12">
+      <div className="flex items-center gap-6 mb-3">
+        {Icon && <Icon className="w-8 h-8 text-emerald-500" />}
+        <h2 className="text-4xl md:text-6xl font-black text-zinc-900 tracking-tighter">{title}</h2>
       </div>
-      {subtitle && <p className="text-zinc-500 font-mono text-xs uppercase tracking-widest">{subtitle}</p>}
+      {subtitle && <p className="text-zinc-400 font-mono text-sm uppercase tracking-[0.3em] font-bold">{subtitle}</p>}
     </div>
-    <div className="flex-1 overflow-y-auto custom-scrollbar pr-4">
+    <div className="flex-1 overflow-y-auto custom-scrollbar pr-6 text-lg">
       {children}
     </div>
   </motion.div>
@@ -51,8 +51,8 @@ const TEAM_MEMBERS = [
   { name: "KLEDYSON DANIEL CAMPOS VIANA", role: "Design de Interface e Experiência (UI/UX)" },
   { name: "MARIA BIATRISSE BEZERRA FERREIRA", role: "Análise de Dados e Fórmulas Estatísticas" },
   { name: "MARIA SARAH DA SILVA SOUSA", role: "Revisão de Código e Qualidade" },
-  { name: "PAULO VICTOR SILVA CAMPOS", role: "Líder Chave da Programação e Arquitetura" },
-  { name: "WEVLYNN YASMIM MORAES DE OLIVEIRA", role: "Organização de Dataset e Pré-processamento" }
+  { name: "PAULO VICTOR SILVA CAMPOS", role: "Programação, Arquitetura e UI/UX" },
+  { name: "WEVLYNN YASMIM MORAES DE OLIVEIRA", role: "Análise e Pesquisa Técnica" }
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 export const PresentationSlides: React.FC<{ onClose: () => void }> = ({ onClose }) => {
@@ -61,25 +61,21 @@ export const PresentationSlides: React.FC<{ onClose: () => void }> = ({ onClose 
   const slides = [
     // Slide 1: Capa
     {
-      title: "Análise Estatística & Python",
-      subtitle: "Dataset Iris • Tutorial Completo",
+      title: "Análise Estatística Iris",
+      subtitle: "Estudo de Dados e Frequências",
       icon: Presentation,
       content: (
         <div className="flex flex-col items-center justify-center h-full text-center">
           <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
+            initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="w-24 h-24 bg-zinc-900 text-white rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-zinc-200"
+            className="w-32 h-32 bg-emerald-500 text-white rounded-[2.5rem] flex items-center justify-center mb-10 shadow-2xl shadow-emerald-200"
           >
-            <Terminal className="w-12 h-12" />
+            <BarChart3 className="w-16 h-16" />
           </motion.div>
-          <h1 className="text-5xl font-black text-zinc-900 mb-4 tracking-tighter italic">PYTHON & STATS</h1>
-          <p className="text-zinc-500 font-mono text-sm tracking-[0.2em] uppercase">Do Código à Tabela de Frequência</p>
-          <div className="mt-12 flex gap-2">
-            <div className="px-4 py-2 bg-zinc-100 text-zinc-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Lógica Matemática</div>
-            <div className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Python Script</div>
-            <div className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Tabelas</div>
-          </div>
+          <h1 className="text-6xl md:text-8xl font-black text-zinc-900 mb-6 tracking-tighter uppercase">ESTATÍSTICA</h1>
+          <p className="text-zinc-500 font-mono text-xl tracking-[0.4em] uppercase">Organização e Análise de Dados</p>
+          <div className="mt-16 h-1.5 w-32 bg-emerald-500 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.5)]" />
         </div>
       )
     },
@@ -96,24 +92,14 @@ export const PresentationSlides: React.FC<{ onClose: () => void }> = ({ onClose 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className={`group p-6 bg-white border rounded-2xl transition-all flex items-center gap-4 ${
-                member.name.includes("PAULO VICTOR") 
-                ? "border-emerald-500 bg-emerald-50/30" 
-                : "border-zinc-100 hover:border-zinc-900 hover:bg-zinc-50"
-              }`}
+              className="group p-6 bg-white border border-zinc-100 hover:border-zinc-900 hover:bg-zinc-50 rounded-2xl transition-all flex items-center gap-4"
             >
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                member.name.includes("PAULO VICTOR")
-                ? "bg-emerald-500 text-white"
-                : "bg-zinc-100 text-zinc-400 group-hover:bg-zinc-900 group-hover:text-white"
-              }`}>
+              <div className="w-10 h-10 rounded-full bg-zinc-100 text-zinc-400 group-hover:bg-zinc-900 group-hover:text-white flex items-center justify-center transition-colors">
                 <Users className="w-5 h-5" />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-zinc-900 uppercase tracking-tight">{member.name}</span>
-                <span className={`text-[10px] font-mono uppercase tracking-wider ${
-                  member.name.includes("PAULO VICTOR") ? "text-emerald-600 font-bold" : "text-zinc-400"
-                }`}>
+                <span className="text-base font-bold text-zinc-900 uppercase tracking-tight">{member.name}</span>
+                <span className="text-xs font-mono uppercase tracking-wider text-zinc-400">
                   {member.role}
                 </span>
               </div>
@@ -124,28 +110,60 @@ export const PresentationSlides: React.FC<{ onClose: () => void }> = ({ onClose 
     },
     // Slide 3: Objetivo do Projeto
     {
-      title: "Objetivo do Projeto",
-      subtitle: "O que estamos construindo?",
-      icon: Filter,
+      title: "O que é Frequência?",
+      subtitle: "Entendendo a Distribuição",
+      icon: TrendingUp,
       content: (
-        <div className="space-y-6">
-          <p className="text-sm text-zinc-600 leading-relaxed">
-            Nossa missão é criar uma ferramenta que transforme dados brutos em conhecimento estatístico. Não queremos apenas o resultado, mas entender o <strong>processo matemático</strong> por trás de cada número.
+        <div className="space-y-8">
+          <p className="text-xl text-zinc-600 leading-relaxed">
+            A <strong>Frequência</strong> é simplesmente a contagem de quantas vezes um valor aparece. 
+            Imagine organizar flores por tamanho:
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-zinc-50 border border-zinc-100 rounded-2xl">
-              <h4 className="font-bold text-zinc-900 text-[10px] mb-2 uppercase">Automação</h4>
-              <p className="text-[10px] text-zinc-500">Eliminar o erro humano em cálculos repetitivos.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-8 bg-emerald-50 rounded-3xl border border-emerald-100">
+              <h4 className="font-bold text-emerald-900 text-lg mb-4 uppercase">Frequência Simples</h4>
+              <p className="text-base text-emerald-700">
+                Contamos cada valor exato. Exemplo: "Temos 3 flores com exatamente 5.1cm".
+              </p>
             </div>
-            <div className="p-4 bg-zinc-50 border border-zinc-100 rounded-2xl">
-              <h4 className="font-bold text-zinc-900 text-[10px] mb-2 uppercase">Educação</h4>
-              <p className="text-[10px] text-zinc-500">Ensinar como a lógica de programação aplica a estatística.</p>
-            </div>
-            <div className="p-4 bg-zinc-50 border border-zinc-100 rounded-2xl">
-              <h4 className="font-bold text-zinc-900 text-[10px] mb-2 uppercase">Visualização</h4>
-              <p className="text-[10px] text-zinc-500">Organizar dados em tabelas claras e interpretáveis.</p>
+            <div className="p-8 bg-blue-50 rounded-3xl border border-blue-100">
+              <h4 className="font-bold text-blue-900 text-lg mb-4 uppercase">Frequência Agrupada</h4>
+              <p className="text-base text-blue-700">
+                Criamos "gavetas" ou faixas. Exemplo: "Temos 10 flores que medem entre 5cm e 6cm".
+              </p>
             </div>
           </div>
+          <div className="p-6 bg-zinc-50 rounded-2xl border border-zinc-100 italic text-zinc-500 text-center">
+            "Agrupar ajuda a ver o desenho geral dos dados quando temos muitos valores diferentes."
+          </div>
+        </div>
+      )
+    },
+    {
+      title: "O que são Classes?",
+      subtitle: "As 'Gavetas' dos Dados",
+      icon: Layers,
+      content: (
+        <div className="space-y-8">
+          <p className="text-xl text-zinc-600 leading-relaxed">
+            Quando os dados são muito variados (como 5.1, 5.22, 5.31...), a tabela fica gigante. 
+            Para resolver isso, usamos <strong>Classes</strong>.
+          </p>
+          <div className="flex flex-col md:flex-row gap-4 items-center justify-center py-6">
+            <div className="w-full md:w-1/3 p-6 bg-white border-2 border-dashed border-zinc-200 rounded-2xl text-center">
+              <span className="text-zinc-400 text-xs uppercase font-bold block mb-2">Dados Brutos</span>
+              <span className="text-lg font-mono">5.1, 5.2, 5.8, 6.1, 6.3</span>
+            </div>
+            <ChevronRight className="w-8 h-8 text-zinc-300 hidden md:block" />
+            <div className="w-full md:w-1/3 p-6 bg-emerald-50 border-2 border-emerald-200 rounded-2xl text-center">
+              <span className="text-emerald-600 text-xs uppercase font-bold block mb-2">Classe [5.0 - 6.0]</span>
+              <span className="text-2xl font-bold text-emerald-700">3 Flores</span>
+            </div>
+          </div>
+          <p className="text-base text-zinc-500 text-center max-w-2xl mx-auto">
+            A <strong>Regra de Sturges</strong> que usamos no projeto é apenas uma fórmula matemática para decidir 
+            quantas dessas "gavetas" devemos criar para que a análise não fique nem muito detalhada, nem muito simplista.
+          </p>
         </div>
       )
     },
@@ -160,8 +178,8 @@ export const PresentationSlides: React.FC<{ onClose: () => void }> = ({ onClose 
             O conjunto de dados <strong>Iris</strong> é um dos mais famosos na estatística. Ele contém 150 amostras de três espécies de flores Iris. Para este projeto, focamos na variável quantitativa contínua: <strong>Comprimento da Sépala</strong>.
           </p>
           <div className="p-6 bg-zinc-50 rounded-2xl border border-zinc-100">
-            <h4 className="font-bold text-zinc-900 mb-4 text-xs uppercase tracking-widest">Estrutura do Arquivo CSV:</h4>
-            <div className="p-4 bg-white border border-zinc-200 rounded-xl font-mono text-[10px] text-zinc-500">
+            <h4 className="font-bold text-zinc-900 mb-4 text-sm uppercase tracking-widest">Estrutura do Arquivo CSV:</h4>
+            <div className="p-4 bg-white border border-zinc-200 rounded-xl font-mono text-sm text-zinc-500">
               sepal_length,sepal_width,petal_length,petal_width,species<br/>
               5.1,3.5,1.4,0.2,setosa<br/>
               4.9,3.0,1.4,0.2,setosa<br/>
@@ -520,22 +538,69 @@ for i in range(k):
               <div className="w-2 h-2 rounded-full bg-emerald-500" />
             </div>
             <pre className="text-emerald-500 font-mono text-[10px] leading-relaxed">
-{`$ python iris_analysis.py
-------------------------------------
-RESULTADOS: SEPAL_LENGTH
-------------------------------------
-Média: 5.84 | Mediana: 5.80 | Moda: [5.0]
-Desvio Padrão: 0.83
-------------------------------------
-TABELA DE FREQUÊNCIA (STURGES)
-9 Classes geradas com sucesso.
-------------------------------------`}
+{`Escolha a espécie:
+1 - Iris Setosa
+2 - Iris Versicolor
+3 - Iris Virginica
+4 - Todas
+
+Digite a opção: 1
+
+Escolha o atributo:
+1 - Comprimento da Sépala
+2 - Largura da Sépala
+3 - Comprimento da Pétala
+4 - Largura da Pétala
+
+Digite a opção: 1
+
+RESULTADOS
+----------------------------------------
+Quantidade de dados: 2
+Média: 5.0
+Mediana: 5.0
+Moda: [5.1, 4.9]
+Variância: 0.02
+Desvio padrão: 0.1414`}
             </pre>
           </div>
         </div>
       )
     },
-    // Slide 20: Conclusão
+    {
+      title: "Exato vs. Agrupado",
+      subtitle: "Por que os valores mudam?",
+      icon: TrendingUp,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600 leading-relaxed">
+            Você notou que a Média no topo é diferente da Média na tabela? Isso acontece devido ao <strong>Erro de Agrupamento</strong>.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-5 bg-emerald-50 border border-emerald-100 rounded-2xl">
+              <h4 className="font-bold text-emerald-900 text-xs mb-3 uppercase flex items-center gap-2">
+                <Check className="w-4 h-4" /> Cálculo Exato
+              </h4>
+              <p className="text-[10px] text-emerald-700 leading-relaxed">
+                Usa os valores reais (ex: 5.1, 4.9). É a verdade absoluta dos dados. Usado quando temos acesso ao banco de dados completo.
+              </p>
+            </div>
+            <div className="p-5 bg-amber-50 border border-amber-100 rounded-2xl">
+              <h4 className="font-bold text-amber-900 text-xs mb-3 uppercase flex items-center gap-2">
+                <Calculator className="w-4 h-4" /> Estimativa Agrupada
+              </h4>
+              <p className="text-[10px] text-amber-700 leading-relaxed">
+                Usa o <strong>Ponto Médio</strong> da classe. Assume que todos os dados de um intervalo são iguais ao centro dele. É uma aproximação necessária em grandes censos.
+              </p>
+            </div>
+          </div>
+          <p className="text-[10px] text-zinc-400 italic text-center">
+            "Na estatística, o agrupamento simplifica a visão, mas sacrifica a precisão decimal."
+          </p>
+        </div>
+      )
+    },
+    // Slide 21: Conclusão
     {
       title: "Conclusão",
       subtitle: "Encerramento do Projeto",
@@ -552,7 +617,7 @@ TABELA DE FREQUÊNCIA (STURGES)
             </p>
           </div>
           <div className="pt-8 border-t border-zinc-100 w-full">
-            <p className="text-zinc-400 font-mono text-[10px] uppercase tracking-widest mb-4">Liderança de Programação: Paulo Victor</p>
+            <p className="text-zinc-400 font-mono text-[10px] uppercase tracking-widest mb-4">Desenvolvimento e Arquitetura: Paulo Victor</p>
             <div className="flex justify-center gap-4">
               <div className="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center"><Calculator className="w-4 h-4 text-zinc-400" /></div>
               <div className="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center"><Code2 className="w-4 h-4 text-zinc-400" /></div>
