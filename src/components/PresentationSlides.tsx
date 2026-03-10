@@ -61,7 +61,7 @@ export const PresentationSlides: React.FC<{ onClose: () => void }> = ({ onClose 
   const slides = [
     // Slide 1: Capa
     {
-      title: "Análise Estatística Iris",
+      title: "UNIFACEMA",
       subtitle: "Estudo de Dados e Frequências",
       icon: Presentation,
       content: (

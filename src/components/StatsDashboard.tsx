@@ -400,7 +400,7 @@ const StatsDashboard: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-900"
                 >
-                  Análise Iris
+                  UNIFACEMA
                 </motion.h1>
 
                 <motion.div 

@@ -12,7 +12,7 @@ async function startServer() {
 
   // API routes
   app.get("/api/health", (req, res) => {
-    res.json({ status: "ok", message: "Iris Stats Explorer API is running" });
+    res.json({ status: "ok", message: "UNIFACEMA API is running" });
   });
 
   // Vite middleware for development
