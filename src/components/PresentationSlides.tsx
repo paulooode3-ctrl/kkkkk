@@ -523,7 +523,45 @@ for i in range(k):
         </div>
       )
     },
-    // Slide 19: Execução no Terminal
+    // Slide 19: Fluxo Interativo (Main)
+    {
+      title: "Fluxo Interativo (Main)",
+      subtitle: "Interface e Menus",
+      icon: Terminal,
+      content: (
+        <div className="space-y-6">
+          <p className="text-sm text-zinc-600">
+            O código completo é um script interativo. Ele usa a função <code>main()</code> para orquestrar o fluxo, desde a leitura até a exibição.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 bg-[#1e1e1e] rounded-xl border border-white/5">
+              <h4 className="text-emerald-400 text-[10px] uppercase font-bold mb-2">Filtragem Dinâmica</h4>
+              <pre className="text-zinc-400 font-mono text-[9px]">
+{`def filtrar_especie(dados, opcao):
+    # Converte '1' em 'setosa'
+    # Retorna apenas as flores
+    # daquela espécie específica.`}
+              </pre>
+            </div>
+            <div className="p-4 bg-[#1e1e1e] rounded-xl border border-white/5">
+              <h4 className="text-emerald-400 text-[10px] uppercase font-bold mb-2">Tratamento de Erros</h4>
+              <pre className="text-zinc-400 font-mono text-[9px]">
+{`try:
+    with open('iris.csv') as f:
+        ...
+except FileNotFoundError:
+    # Se o arquivo sumir, o código
+    # não trava e usa dados padrão.`}
+              </pre>
+            </div>
+          </div>
+          <p className="text-[10px] text-zinc-500 italic">
+            Isso torna o script "robusto": ele interage com o usuário e não "quebra" se o arquivo de dados estiver faltando.
+          </p>
+        </div>
+      )
+    },
+    // Slide 20: Execução no Terminal
     {
       title: "Execução no Terminal",
       subtitle: "O Script em Ação",

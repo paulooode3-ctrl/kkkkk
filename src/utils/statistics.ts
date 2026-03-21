@@ -128,6 +128,20 @@ export function getGroupedFrequencyTable(data: number[]): GroupedFrequencyEntry[
 
   // Sturges' Rule: k = 1 + 3.322 * log10(n)
   const k = Math.ceil(1 + 3.322 * Math.log10(n));
+  
+  // Handle case where all values are the same (range is 0)
+  if (range === 0) {
+    return [{
+      lowerBound: min - 0.5,
+      upperBound: min + 0.5,
+      label: `${min.toFixed(2)}`,
+      xi: min,
+      fi: n,
+      fri: 1,
+      faci: n
+    }];
+  }
+
   const h = range / k; // Class width
 
   const table: GroupedFrequencyEntry[] = [];
