@@ -34,7 +34,8 @@ import {
   Check,
   Users,
   ChevronDown,
-  Presentation
+  Presentation,
+  Hash
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PresentationSlides } from './PresentationSlides';
@@ -287,7 +288,7 @@ const StatsDashboard: React.FC = () => {
     }
   };
 
-  const StatCard = ({ title, value, icon: Icon }: { title: string; value: number; icon: any }) => (
+  const StatCard = ({ title, value, icon: Icon }: { title: string; value: number | string; icon: any }) => (
     <motion.div 
       variants={itemVariants}
       className="bg-white border border-zinc-200 p-6 rounded-xl flex flex-col justify-between"
@@ -300,7 +301,7 @@ const StatsDashboard: React.FC = () => {
       </div>
       <div>
         <p className="text-2xl font-mono font-bold text-zinc-900 tracking-tight">
-          {value.toFixed(4)}
+          {typeof value === 'number' ? value.toFixed(4) : value}
         </p>
         <p className="text-[10px] font-sans font-bold text-zinc-500 uppercase tracking-wider mt-1">{title}</p>
       </div>
@@ -456,9 +457,10 @@ const StatsDashboard: React.FC = () => {
               animate="visible"
               className="space-y-10"
             >
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 <StatCard title="Média" value={rawStats.mean} icon={Calculator} />
                 <StatCard title="Mediana" value={rawStats.median} icon={TrendingUp} />
+                <StatCard title="Moda" value={rawStats.mode.length > 0 ? rawStats.mode.join(', ') : 'N/A'} icon={Hash} />
                 <StatCard title="Variância" value={rawStats.variance} icon={Layers} />
                 <StatCard title="Desvio Padrão" value={rawStats.stdDev} icon={Maximize2} />
               </div>
@@ -547,6 +549,7 @@ const StatsDashboard: React.FC = () => {
                     {[
                       { label: 'Média', value: groupedStats.mean, icon: Calculator, color: 'text-emerald-600' },
                       { label: 'Mediana', value: groupedStats.median, icon: TrendingUp, color: 'text-blue-600' },
+                      { label: 'Moda', value: groupedStats.mode, icon: Hash, color: 'text-indigo-600' },
                       { label: 'Variância', value: groupedStats.variance, icon: Layers, color: 'text-amber-600' },
                       { label: 'Desvio Padrão', value: groupedStats.stdDev, icon: BarChart3, color: 'text-rose-600' }
                     ].map((stat) => (

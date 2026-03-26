@@ -31,6 +31,7 @@ export interface GroupedFrequencyEntry {
 export interface GroupedStats {
   mean: number;
   median: number;
+  mode: number;
   variance: number;
   stdDev: number;
 }
@@ -207,10 +208,38 @@ export function calculateGroupedVariance(table: GroupedFrequencyEntry[]): number
   return sumFiXiSq / (n - 1);
 }
 
+export function calculateGroupedMode(table: GroupedFrequencyEntry[]): number {
+  if (table.length === 0) return 0;
+  
+  // Find modal class (class with highest frequency)
+  let modalClassIndex = 0;
+  let maxFi = -1;
+  
+  table.forEach((entry, i) => {
+    if (entry.fi > maxFi) {
+      maxFi = entry.fi;
+      modalClassIndex = i;
+    }
+  });
+
+  const modalClass = table[modalClassIndex];
+  const fi = modalClass.fi;
+  const fiPrev = modalClassIndex > 0 ? table[modalClassIndex - 1].fi : 0;
+  const fiNext = modalClassIndex < table.length - 1 ? table[modalClassIndex + 1].fi : 0;
+  const h = modalClass.upperBound - modalClass.lowerBound;
+
+  const denominator = (fi - fiPrev) + (fi - fiNext);
+  if (denominator === 0) return modalClass.xi; // Avoid division by zero if all classes have same frequency
+
+  // Mode = L + ((fi - fi_prev) / ((fi - fi_prev) + (fi - fi_next))) * h
+  return modalClass.lowerBound + ((fi - fiPrev) / denominator) * h;
+}
+
 export function getGroupedStats(table: GroupedFrequencyEntry[]): GroupedStats {
   return {
     mean: calculateGroupedMean(table),
     median: calculateGroupedMedian(table),
+    mode: calculateGroupedMode(table),
     variance: calculateGroupedVariance(table),
     stdDev: Math.sqrt(calculateGroupedVariance(table))
   };
