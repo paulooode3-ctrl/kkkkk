@@ -616,14 +616,7 @@ Desvio padrão: 0.1414`}
               Demonstramos que a estatística não é apenas sobre fórmulas, mas sobre como organizamos a informação para tomar decisões. Com Python, transformamos 150 linhas de texto em uma análise clara e precisa.
             </p>
           </div>
-          <div className="pt-8 border-t border-zinc-100 w-full">
-            <p className="text-zinc-400 font-mono text-[10px] uppercase tracking-widest mb-4">Desenvolvimento e Arquitetura: Paulo Victor</p>
-            <div className="flex justify-center gap-4">
-              <div className="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center"><Calculator className="w-4 h-4 text-zinc-400" /></div>
-              <div className="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center"><Code2 className="w-4 h-4 text-zinc-400" /></div>
-              <div className="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center"><Terminal className="w-4 h-4 text-zinc-400" /></div>
-            </div>
-          </div>
+          <div className="pt-8 border-t border-zinc-100 w-full" />
         </div>
       )
     }
