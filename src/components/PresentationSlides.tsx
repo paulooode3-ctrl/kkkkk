@@ -369,7 +369,15 @@ maximo = dados[-1]`}
       icon: TrendingUp,
       content: (
         <div className="space-y-6">
-          <p className="text-sm text-zinc-600">O desvio padrão nos diz o quão "espalhados" os dados estão da média. É a raiz quadrada da variância.</p>
+          <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-mono font-bold text-emerald-600 uppercase tracking-widest">Roteiro de Apresentação</span>
+            </div>
+            <p className="text-sm text-emerald-700 font-medium leading-relaxed italic">
+              "Agora nessa parte do projeto nós mostramos variância e desvio padrão, que são medidas usadas para entender o quanto os dados estão espalhados em relação à média. Primeiro precisamos entender a ideia principal."
+            </p>
+          </div>
           <div className="p-6 bg-zinc-900 text-white rounded-2xl text-center">
             <p className="text-2xl font-mono">s = √[ Σ(x - x̄)² / (n - 1) ]</p>
           </div>
@@ -391,7 +399,15 @@ maximo = dados[-1]`}
       icon: TableIcon,
       content: (
         <div className="space-y-6">
-          <p className="text-sm text-zinc-600">Nesta tabela, contamos cada valor individual. É útil para ver a distribuição exata de cada medida.</p>
+          <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-mono font-bold text-emerald-600 uppercase tracking-widest">Roteiro de Apresentação</span>
+            </div>
+            <p className="text-sm text-emerald-700 font-medium leading-relaxed italic">
+              "Agora nessa parte do projeto nós mostramos a Tabela Não Agrupada, também chamada de tabela de frequência simples. Esse tipo de tabela serve para contar quantas vezes cada valor aparece nos dados. Ou seja, em vez de olhar apenas os números, organizamos eles para entender a distribuição dos valores."
+            </p>
+          </div>
           <div className="p-6 bg-[#1e1e1e] rounded-2xl border border-white/5">
             <pre className="text-emerald-400 font-mono text-[10px] leading-relaxed">
 {`# Lógica em Python:
@@ -416,7 +432,15 @@ for valor in sorted(contagem.keys()):
       icon: TrendingUp,
       content: (
         <div className="space-y-6">
-          <p className="text-sm text-zinc-600">A Amplitude Total (AT) define o "tamanho" do nosso intervalo de estudo. É a diferença entre o maior e o menor valor.</p>
+          <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-mono font-bold text-emerald-600 uppercase tracking-widest">Roteiro de Apresentação</span>
+            </div>
+            <p className="text-sm text-emerald-700 font-medium leading-relaxed italic">
+              "Agora nessa parte do projeto nós mostramos a preparação dos dados através da amplitude. A amplitude total, representada por AT, é uma medida que indica o espaço que os dados ocupam. Ela mostra a diferença entre o maior valor e o menor valor de um conjunto de dados. Isso é importante porque ajuda a entender o intervalo total em que os dados estão distribuídos."
+            </p>
+          </div>
           <div className="p-8 bg-zinc-50 rounded-3xl border border-zinc-100 text-center">
             <h4 className="text-zinc-400 font-mono text-[10px] uppercase mb-4">Cálculo de AT</h4>
             <p className="text-4xl font-mono text-zinc-900">AT = Xmax - Xmin</p>

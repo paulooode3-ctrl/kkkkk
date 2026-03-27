@@ -4,6 +4,7 @@
  */
 
 export interface RawStats {
+  count: number;
   mean: number;
   median: number;
   mode: number[];
@@ -59,13 +60,16 @@ export function calculateMode(data: number[]): number[] {
   const counts: { [key: number]: number } = {};
   let maxCount = 0;
   data.forEach(val => {
-    counts[val] = (counts[val] || 0) + 1;
-    if (counts[val] > maxCount) maxCount = counts[val];
+    // Round to 1 decimal place to avoid floating point issues
+    const rounded = Math.round(val * 10) / 10;
+    counts[rounded] = (counts[rounded] || 0) + 1;
+    if (counts[rounded] > maxCount) maxCount = counts[rounded];
   });
 
   const modes = Object.keys(counts)
     .filter(key => counts[Number(key)] === maxCount)
-    .map(Number);
+    .map(Number)
+    .sort((a, b) => a - b);
   
   return modes;
 }
@@ -83,6 +87,7 @@ export function calculateStdDev(data: number[]): number {
 
 export function getRawStats(data: number[]): RawStats {
   return {
+    count: data.length,
     mean: calculateMean(data),
     median: calculateMedian(data),
     mode: calculateMode(data),

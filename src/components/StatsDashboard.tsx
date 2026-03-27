@@ -5,6 +5,11 @@ import {
   getUngroupedFrequencyTable, 
   getGroupedFrequencyTable, 
   getGroupedStats,
+  calculateMean,
+  calculateMedian,
+  calculateMode,
+  calculateVariance,
+  calculateStdDev,
 } from '../utils/statistics';
 import { 
   BarChart, 
@@ -35,7 +40,8 @@ import {
   Users,
   ChevronDown,
   Presentation,
-  Hash
+  Hash,
+  AlertTriangle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PresentationSlides } from './PresentationSlides';
@@ -85,10 +91,154 @@ def ler_csv(caminho):
         return [
             {'sepal_length': 5.1, 'sepal_width': 3.5, 'petal_length': 1.4, 'petal_width': 0.2, 'species': 'setosa'},
             {'sepal_length': 4.9, 'sepal_width': 3.0, 'petal_length': 1.4, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 4.7, 'sepal_width': 3.2, 'petal_length': 1.3, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 4.6, 'sepal_width': 3.1, 'petal_length': 1.5, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.0, 'sepal_width': 3.6, 'petal_length': 1.4, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.4, 'sepal_width': 3.9, 'petal_length': 1.7, 'petal_width': 0.4, 'species': 'setosa'},
+            {'sepal_length': 4.6, 'sepal_width': 3.4, 'petal_length': 1.4, 'petal_width': 0.3, 'species': 'setosa'},
+            {'sepal_length': 5.0, 'sepal_width': 3.4, 'petal_length': 1.5, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 4.4, 'sepal_width': 2.9, 'petal_length': 1.4, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 4.9, 'sepal_width': 3.1, 'petal_length': 1.5, 'petal_width': 0.1, 'species': 'setosa'},
+            {'sepal_length': 5.4, 'sepal_width': 3.7, 'petal_length': 1.5, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 4.8, 'sepal_width': 3.4, 'petal_length': 1.6, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 4.8, 'sepal_width': 3.0, 'petal_length': 1.4, 'petal_width': 0.1, 'species': 'setosa'},
+            {'sepal_length': 4.3, 'sepal_width': 3.0, 'petal_length': 1.1, 'petal_width': 0.1, 'species': 'setosa'},
+            {'sepal_length': 5.8, 'sepal_width': 4.0, 'petal_length': 1.2, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.7, 'sepal_width': 4.4, 'petal_length': 1.5, 'petal_width': 0.4, 'species': 'setosa'},
+            {'sepal_length': 5.4, 'sepal_width': 3.9, 'petal_length': 1.3, 'petal_width': 0.4, 'species': 'setosa'},
+            {'sepal_length': 5.1, 'sepal_width': 3.5, 'petal_length': 1.4, 'petal_width': 0.3, 'species': 'setosa'},
+            {'sepal_length': 5.7, 'sepal_width': 3.8, 'petal_length': 1.7, 'petal_width': 0.3, 'species': 'setosa'},
+            {'sepal_length': 5.1, 'sepal_width': 3.8, 'petal_length': 1.5, 'petal_width': 0.3, 'species': 'setosa'},
+            {'sepal_length': 5.4, 'sepal_width': 3.4, 'petal_length': 1.7, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.1, 'sepal_width': 3.7, 'petal_length': 1.5, 'petal_width': 0.4, 'species': 'setosa'},
+            {'sepal_length': 4.6, 'sepal_width': 3.6, 'petal_length': 1.0, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.1, 'sepal_width': 3.3, 'petal_length': 1.7, 'petal_width': 0.5, 'species': 'setosa'},
+            {'sepal_length': 4.8, 'sepal_width': 3.4, 'petal_length': 1.9, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.0, 'sepal_width': 3.0, 'petal_length': 1.6, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.0, 'sepal_width': 3.4, 'petal_length': 1.6, 'petal_width': 0.4, 'species': 'setosa'},
+            {'sepal_length': 5.2, 'sepal_width': 3.5, 'petal_length': 1.5, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.2, 'sepal_width': 3.4, 'petal_length': 1.4, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 4.7, 'sepal_width': 3.2, 'petal_length': 1.6, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 4.8, 'sepal_width': 3.1, 'petal_length': 1.6, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.4, 'sepal_width': 3.4, 'petal_length': 1.5, 'petal_width': 0.4, 'species': 'setosa'},
+            {'sepal_length': 5.2, 'sepal_width': 4.1, 'petal_length': 1.5, 'petal_width': 0.1, 'species': 'setosa'},
+            {'sepal_length': 5.5, 'sepal_width': 4.2, 'petal_length': 1.4, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 4.9, 'sepal_width': 3.1, 'petal_length': 1.5, 'petal_width': 0.1, 'species': 'setosa'},
+            {'sepal_length': 5.0, 'sepal_width': 3.2, 'petal_length': 1.2, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.5, 'sepal_width': 3.5, 'petal_length': 1.3, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 4.9, 'sepal_width': 3.1, 'petal_length': 1.5, 'petal_width': 0.1, 'species': 'setosa'},
+            {'sepal_length': 4.4, 'sepal_width': 3.0, 'petal_length': 1.3, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.1, 'sepal_width': 3.4, 'petal_length': 1.5, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.0, 'sepal_width': 3.5, 'petal_length': 1.3, 'petal_width': 0.3, 'species': 'setosa'},
+            {'sepal_length': 4.5, 'sepal_width': 2.3, 'petal_length': 1.3, 'petal_width': 0.3, 'species': 'setosa'},
+            {'sepal_length': 4.4, 'sepal_width': 3.2, 'petal_length': 1.3, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.0, 'sepal_width': 3.5, 'petal_length': 1.6, 'petal_width': 0.6, 'species': 'setosa'},
+            {'sepal_length': 5.1, 'sepal_width': 3.8, 'petal_length': 1.9, 'petal_width': 0.4, 'species': 'setosa'},
+            {'sepal_length': 4.8, 'sepal_width': 3.0, 'petal_length': 1.4, 'petal_width': 0.3, 'species': 'setosa'},
+            {'sepal_length': 5.1, 'sepal_width': 3.8, 'petal_length': 1.6, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 4.6, 'sepal_width': 3.2, 'petal_length': 1.4, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.3, 'sepal_width': 3.7, 'petal_length': 1.5, 'petal_width': 0.2, 'species': 'setosa'},
+            {'sepal_length': 5.0, 'sepal_width': 3.3, 'petal_length': 1.4, 'petal_width': 0.2, 'species': 'setosa'},
             {'sepal_length': 7.0, 'sepal_width': 3.2, 'petal_length': 4.7, 'petal_width': 1.4, 'species': 'versicolor'},
             {'sepal_length': 6.4, 'sepal_width': 3.2, 'petal_length': 4.5, 'petal_width': 1.5, 'species': 'versicolor'},
+            {'sepal_length': 6.9, 'sepal_width': 3.1, 'petal_length': 4.9, 'petal_width': 1.5, 'species': 'versicolor'},
+            {'sepal_length': 5.5, 'sepal_width': 2.3, 'petal_length': 4.0, 'petal_width': 1.3, 'species': 'versicolor'},
+            {'sepal_length': 6.5, 'sepal_width': 2.8, 'petal_length': 4.6, 'petal_width': 1.5, 'species': 'versicolor'},
+            {'sepal_length': 5.7, 'sepal_width': 2.8, 'petal_length': 4.5, 'petal_width': 1.3, 'species': 'versicolor'},
+            {'sepal_length': 6.3, 'sepal_width': 3.3, 'petal_length': 4.7, 'petal_width': 1.6, 'species': 'versicolor'},
+            {'sepal_length': 4.9, 'sepal_width': 2.4, 'petal_length': 3.3, 'petal_width': 1.0, 'species': 'versicolor'},
+            {'sepal_length': 6.6, 'sepal_width': 2.9, 'petal_length': 4.6, 'petal_width': 1.3, 'species': 'versicolor'},
+            {'sepal_length': 5.2, 'sepal_width': 2.7, 'petal_length': 3.9, 'petal_width': 1.4, 'species': 'versicolor'},
+            {'sepal_length': 5.0, 'sepal_width': 2.0, 'petal_length': 3.5, 'petal_width': 1.0, 'species': 'versicolor'},
+            {'sepal_length': 5.9, 'sepal_width': 3.0, 'petal_length': 4.2, 'petal_width': 1.5, 'species': 'versicolor'},
+            {'sepal_length': 6.0, 'sepal_width': 2.2, 'petal_length': 4.0, 'petal_width': 1.0, 'species': 'versicolor'},
+            {'sepal_length': 6.1, 'sepal_width': 2.9, 'petal_length': 4.7, 'petal_width': 1.4, 'species': 'versicolor'},
+            {'sepal_length': 5.6, 'sepal_width': 2.9, 'petal_length': 3.6, 'petal_width': 1.3, 'species': 'versicolor'},
+            {'sepal_length': 6.7, 'sepal_width': 3.1, 'petal_length': 4.4, 'petal_width': 1.4, 'species': 'versicolor'},
+            {'sepal_length': 5.6, 'sepal_width': 3.0, 'petal_length': 4.5, 'petal_width': 1.5, 'species': 'versicolor'},
+            {'sepal_length': 5.8, 'sepal_width': 2.7, 'petal_length': 4.1, 'petal_width': 1.0, 'species': 'versicolor'},
+            {'sepal_length': 6.2, 'sepal_width': 2.2, 'petal_length': 4.5, 'petal_width': 1.5, 'species': 'versicolor'},
+            {'sepal_length': 5.6, 'sepal_width': 2.5, 'petal_length': 3.9, 'petal_width': 1.1, 'species': 'versicolor'},
+            {'sepal_length': 5.9, 'sepal_width': 3.2, 'petal_length': 4.8, 'petal_width': 1.8, 'species': 'versicolor'},
+            {'sepal_length': 6.1, 'sepal_width': 2.8, 'petal_length': 4.0, 'petal_width': 1.3, 'species': 'versicolor'},
+            {'sepal_length': 6.3, 'sepal_width': 2.5, 'petal_length': 4.9, 'petal_width': 1.5, 'species': 'versicolor'},
+            {'sepal_length': 6.1, 'sepal_width': 2.8, 'petal_length': 4.7, 'petal_width': 1.2, 'species': 'versicolor'},
+            {'sepal_length': 6.4, 'sepal_width': 2.9, 'petal_length': 4.3, 'petal_width': 1.3, 'species': 'versicolor'},
+            {'sepal_length': 6.6, 'sepal_width': 3.0, 'petal_length': 4.4, 'petal_width': 1.4, 'species': 'versicolor'},
+            {'sepal_length': 6.8, 'sepal_width': 2.8, 'petal_length': 4.8, 'petal_width': 1.4, 'species': 'versicolor'},
+            {'sepal_length': 6.7, 'sepal_width': 3.0, 'petal_length': 5.0, 'petal_width': 1.7, 'species': 'versicolor'},
+            {'sepal_length': 6.0, 'sepal_width': 2.9, 'petal_length': 4.5, 'petal_width': 1.5, 'species': 'versicolor'},
+            {'sepal_length': 5.7, 'sepal_width': 2.6, 'petal_length': 3.5, 'petal_width': 1.0, 'species': 'versicolor'},
+            {'sepal_length': 5.5, 'sepal_width': 2.4, 'petal_length': 3.8, 'petal_width': 1.1, 'species': 'versicolor'},
+            {'sepal_length': 5.5, 'sepal_width': 2.4, 'petal_length': 3.7, 'petal_width': 1.0, 'species': 'versicolor'},
+            {'sepal_length': 5.8, 'sepal_width': 2.7, 'petal_length': 3.9, 'petal_width': 1.2, 'species': 'versicolor'},
+            {'sepal_length': 6.0, 'sepal_width': 2.7, 'petal_length': 5.1, 'petal_width': 1.6, 'species': 'versicolor'},
+            {'sepal_length': 5.4, 'sepal_width': 3.0, 'petal_length': 4.5, 'petal_width': 1.5, 'species': 'versicolor'},
+            {'sepal_length': 6.0, 'sepal_width': 3.4, 'petal_length': 4.5, 'petal_width': 1.6, 'species': 'versicolor'},
+            {'sepal_length': 6.7, 'sepal_width': 3.1, 'petal_length': 4.7, 'petal_width': 1.5, 'species': 'versicolor'},
+            {'sepal_length': 6.3, 'sepal_width': 2.3, 'petal_length': 4.4, 'petal_width': 1.3, 'species': 'versicolor'},
+            {'sepal_length': 5.6, 'sepal_width': 3.0, 'petal_length': 4.1, 'petal_width': 1.3, 'species': 'versicolor'},
+            {'sepal_length': 5.5, 'sepal_width': 2.5, 'petal_length': 4.0, 'petal_width': 1.3, 'species': 'versicolor'},
+            {'sepal_length': 5.5, 'sepal_width': 2.6, 'petal_length': 4.4, 'petal_width': 1.2, 'species': 'versicolor'},
+            {'sepal_length': 6.1, 'sepal_width': 3.0, 'petal_length': 4.6, 'petal_width': 1.4, 'species': 'versicolor'},
+            {'sepal_length': 5.8, 'sepal_width': 2.6, 'petal_length': 4.0, 'petal_width': 1.2, 'species': 'versicolor'},
+            {'sepal_length': 5.0, 'sepal_width': 2.3, 'petal_length': 3.3, 'petal_width': 1.0, 'species': 'versicolor'},
+            {'sepal_length': 5.6, 'sepal_width': 2.7, 'petal_length': 4.2, 'petal_width': 1.3, 'species': 'versicolor'},
+            {'sepal_length': 5.7, 'sepal_width': 3.0, 'petal_length': 4.2, 'petal_width': 1.2, 'species': 'versicolor'},
+            {'sepal_length': 5.7, 'sepal_width': 2.9, 'petal_length': 4.2, 'petal_width': 1.3, 'species': 'versicolor'},
+            {'sepal_length': 6.2, 'sepal_width': 2.9, 'petal_length': 4.3, 'petal_width': 1.3, 'species': 'versicolor'},
+            {'sepal_length': 5.1, 'sepal_width': 2.5, 'petal_length': 3.0, 'petal_width': 1.1, 'species': 'versicolor'},
+            {'sepal_length': 5.7, 'sepal_width': 2.8, 'petal_length': 4.1, 'petal_width': 1.3, 'species': 'versicolor'},
             {'sepal_length': 6.3, 'sepal_width': 3.3, 'petal_length': 6.0, 'petal_width': 2.5, 'species': 'virginica'},
-            {'sepal_length': 5.8, 'sepal_width': 2.7, 'petal_length': 5.1, 'petal_width': 1.9, 'species': 'virginica'}
+            {'sepal_length': 5.8, 'sepal_width': 2.7, 'petal_length': 5.1, 'petal_width': 1.9, 'species': 'virginica'},
+            {'sepal_length': 7.1, 'sepal_width': 3.0, 'petal_length': 5.9, 'petal_width': 2.1, 'species': 'virginica'},
+            {'sepal_length': 6.3, 'sepal_width': 2.9, 'petal_length': 5.6, 'petal_width': 1.8, 'species': 'virginica'},
+            {'sepal_length': 6.5, 'sepal_width': 3.0, 'petal_length': 5.8, 'petal_width': 2.2, 'species': 'virginica'},
+            {'sepal_length': 7.6, 'sepal_width': 3.0, 'petal_length': 6.6, 'petal_width': 2.1, 'species': 'virginica'},
+            {'sepal_length': 4.9, 'sepal_width': 2.5, 'petal_length': 4.5, 'petal_width': 1.7, 'species': 'virginica'},
+            {'sepal_length': 7.3, 'sepal_width': 2.9, 'petal_length': 6.3, 'petal_width': 1.8, 'species': 'virginica'},
+            {'sepal_length': 6.7, 'sepal_width': 2.5, 'petal_length': 5.8, 'petal_width': 1.8, 'species': 'virginica'},
+            {'sepal_length': 7.2, 'sepal_width': 3.6, 'petal_length': 6.1, 'petal_width': 2.5, 'species': 'virginica'},
+            {'sepal_length': 6.5, 'sepal_width': 3.2, 'petal_length': 5.1, 'petal_width': 2.0, 'species': 'virginica'},
+            {'sepal_length': 6.4, 'sepal_width': 2.7, 'petal_length': 5.3, 'petal_width': 1.9, 'species': 'virginica'},
+            {'sepal_length': 6.8, 'sepal_width': 3.0, 'petal_length': 5.5, 'petal_width': 2.1, 'species': 'virginica'},
+            {'sepal_length': 5.7, 'sepal_width': 2.5, 'petal_length': 5.0, 'petal_width': 2.0, 'species': 'virginica'},
+            {'sepal_length': 5.8, 'sepal_width': 2.8, 'petal_length': 5.1, 'petal_width': 2.4, 'species': 'virginica'},
+            {'sepal_length': 6.4, 'sepal_width': 3.2, 'petal_length': 5.3, 'petal_width': 2.3, 'species': 'virginica'},
+            {'sepal_length': 6.5, 'sepal_width': 3.0, 'petal_length': 5.5, 'petal_width': 1.8, 'species': 'virginica'},
+            {'sepal_length': 7.7, 'sepal_width': 3.8, 'petal_length': 6.7, 'petal_width': 2.2, 'species': 'virginica'},
+            {'sepal_length': 7.7, 'sepal_width': 2.6, 'petal_length': 6.9, 'petal_width': 2.3, 'species': 'virginica'},
+            {'sepal_length': 6.0, 'sepal_width': 2.2, 'petal_length': 5.0, 'petal_width': 1.5, 'species': 'virginica'},
+            {'sepal_length': 6.9, 'sepal_width': 3.2, 'petal_length': 5.7, 'petal_width': 2.3, 'species': 'virginica'},
+            {'sepal_length': 5.6, 'sepal_width': 2.8, 'petal_length': 4.9, 'petal_width': 2.0, 'species': 'virginica'},
+            {'sepal_length': 7.7, 'sepal_width': 2.8, 'petal_length': 6.7, 'petal_width': 2.0, 'species': 'virginica'},
+            {'sepal_length': 6.3, 'sepal_width': 2.7, 'petal_length': 4.9, 'petal_width': 1.8, 'species': 'virginica'},
+            {'sepal_length': 6.7, 'sepal_width': 3.3, 'petal_length': 5.7, 'petal_width': 2.1, 'species': 'virginica'},
+            {'sepal_length': 7.2, 'sepal_width': 3.2, 'petal_length': 6.0, 'petal_width': 1.8, 'species': 'virginica'},
+            {'sepal_length': 6.2, 'sepal_width': 2.8, 'petal_length': 4.8, 'petal_width': 1.8, 'species': 'virginica'},
+            {'sepal_length': 6.1, 'sepal_width': 3.0, 'petal_length': 4.9, 'petal_width': 1.8, 'species': 'virginica'},
+            {'sepal_length': 6.4, 'sepal_width': 2.8, 'petal_length': 5.6, 'petal_width': 2.1, 'species': 'virginica'},
+            {'sepal_length': 7.2, 'sepal_width': 3.0, 'petal_length': 5.8, 'petal_width': 1.6, 'species': 'virginica'},
+            {'sepal_length': 7.4, 'sepal_width': 2.8, 'petal_length': 6.1, 'petal_width': 1.9, 'species': 'virginica'},
+            {'sepal_length': 7.9, 'sepal_width': 3.8, 'petal_length': 6.4, 'petal_width': 2.0, 'species': 'virginica'},
+            {'sepal_length': 6.4, 'sepal_width': 2.8, 'petal_length': 5.6, 'petal_width': 2.2, 'species': 'virginica'},
+            {'sepal_length': 6.3, 'sepal_width': 2.8, 'petal_length': 5.1, 'petal_width': 1.5, 'species': 'virginica'},
+            {'sepal_length': 6.1, 'sepal_width': 2.6, 'petal_length': 5.6, 'petal_width': 1.4, 'species': 'virginica'},
+            {'sepal_length': 7.7, 'sepal_width': 3.0, 'petal_length': 6.1, 'petal_width': 2.3, 'species': 'virginica'},
+            {'sepal_length': 6.3, 'sepal_width': 3.4, 'petal_length': 5.6, 'petal_width': 2.4, 'species': 'virginica'},
+            {'sepal_length': 6.4, 'sepal_width': 3.1, 'petal_length': 5.5, 'petal_width': 1.8, 'species': 'virginica'},
+            {'sepal_length': 6.0, 'sepal_width': 3.0, 'petal_length': 4.8, 'petal_width': 1.8, 'species': 'virginica'},
+            {'sepal_length': 6.9, 'sepal_width': 3.1, 'petal_length': 5.4, 'petal_width': 2.1, 'species': 'virginica'},
+            {'sepal_length': 6.7, 'sepal_width': 3.1, 'petal_length': 5.6, 'petal_width': 2.4, 'species': 'virginica'},
+            {'sepal_length': 6.9, 'sepal_width': 3.1, 'petal_length': 5.1, 'petal_width': 2.3, 'species': 'virginica'},
+            {'sepal_length': 5.8, 'sepal_width': 2.7, 'petal_length': 5.1, 'petal_width': 1.9, 'species': 'virginica'},
+            {'sepal_length': 6.8, 'sepal_width': 3.2, 'petal_length': 5.9, 'petal_width': 2.3, 'species': 'virginica'},
+            {'sepal_length': 6.7, 'sepal_width': 3.3, 'petal_length': 5.7, 'petal_width': 2.5, 'species': 'virginica'},
+            {'sepal_length': 6.7, 'sepal_width': 3.0, 'petal_length': 5.2, 'petal_width': 2.3, 'species': 'virginica'},
+            {'sepal_length': 6.3, 'sepal_width': 2.5, 'petal_length': 5.0, 'petal_width': 1.9, 'species': 'virginica'},
+            {'sepal_length': 6.5, 'sepal_width': 3.0, 'petal_length': 5.2, 'petal_width': 2.0, 'species': 'virginica'},
+            {'sepal_length': 6.2, 'sepal_width': 3.4, 'petal_length': 5.4, 'petal_width': 2.3, 'species': 'virginica'},
+            {'sepal_length': 5.9, 'sepal_width': 3.0, 'petal_length': 5.1, 'petal_width': 1.8, 'species': 'virginica'}
         ]
 
     return dados
@@ -172,7 +322,7 @@ def calcular_desvio(v):
 def main():
 
     print("="*50)
-    print("UniFacema - Estatística Iris")
+    print("UNIFACEMA - ESTATÍSTICA")
     print("="*50)
     print("Equipe:")
     print("- CLEBERSON DIAS NASCIMENTO")
@@ -202,6 +352,7 @@ def main():
     print("2 - Largura da Sépala")
     print("3 - Comprimento da Pétala")
     print("4 - Largura da Pétala")
+    print("5 - Resumo Geral (Todos)")
 
     atributo = input("\\nDigite a opção: ")
 
@@ -211,6 +362,20 @@ def main():
         "3":"petal_length",
         "4":"petal_width"
     }
+
+    if atributo == "5":
+        print("\\nRESUMO GERAL")
+        print("-" * 60)
+        print(f"{'Atributo':<25} | {'Média':<8} | {'Mediana':<8} | {'Moda'}")
+        print("-" * 60)
+        
+        for cod, nome in mapa.items():
+            v = [d[nome] for d in dados]
+            media = round(calcular_media(v), 2)
+            mediana = round(calcular_mediana(v), 2)
+            moda = calcular_moda(v)
+            print(f"{nome:<25} | {media:<8} | {mediana:<8} | {moda}")
+        return
 
     nome = mapa.get(atributo)
 
@@ -243,6 +408,78 @@ const StatsDashboard: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   const activeAttr = ATTRIBUTES.find(a => a.value === selectedAttr)!;
+
+  const summaryStats = useMemo(() => {
+    const data = selectedSpecies === 'All' 
+      ? IRIS_DATA 
+      : IRIS_DATA.filter(d => d.species === selectedSpecies);
+    
+    return ATTRIBUTES.map(attr => {
+      const values = data.map(d => d[attr.value]);
+      return {
+        label: attr.label,
+        count: values.length,
+        mean: calculateMean(values),
+        median: calculateMedian(values),
+        mode: calculateMode(values),
+        variance: calculateVariance(values),
+        stdDev: calculateStdDev(values)
+      };
+    });
+  }, [selectedSpecies]);
+
+  const comparativeStats = useMemo(() => {
+    const groups = [
+      { label: 'Setosa', value: 'Iris-setosa', n: 50 },
+      { label: 'Versicolor', value: 'Iris-versicolor', n: 50 },
+      { label: 'Virginica', value: 'Iris-virginica', n: 50 },
+    ];
+
+    return groups.map(group => {
+      const data = group.value === 'All' 
+        ? IRIS_DATA 
+        : IRIS_DATA.filter(d => d.species === group.value);
+      
+      const values = data.map(d => d[selectedAttr]);
+      return {
+        label: group.label,
+        n: group.n,
+        mean: calculateMean(values),
+        median: calculateMedian(values),
+        mode: calculateMode(values),
+        variance: calculateVariance(values),
+        stdDev: calculateStdDev(values)
+      };
+    });
+  }, [selectedAttr]);
+
+  const fullReportStats = useMemo(() => {
+    const groups = [
+      { label: 'Iris Setosa', value: 'Iris-setosa', n: 50 },
+      { label: 'Iris Versicolor', value: 'Iris-versicolor', n: 50 },
+      { label: 'Iris Virginica', value: 'Iris-virginica', n: 50 },
+    ];
+
+    return groups.map(group => {
+      const data = group.value === 'All' 
+        ? IRIS_DATA 
+        : IRIS_DATA.filter(d => d.species === group.value);
+      
+      const stats = ATTRIBUTES.map(attr => {
+        const values = data.map(d => d[attr.value]);
+        return {
+          attrLabel: attr.label,
+          mean: calculateMean(values),
+          median: calculateMedian(values),
+          mode: calculateMode(values),
+          variance: calculateVariance(values),
+          stdDev: calculateStdDev(values)
+        };
+      });
+
+      return { ...group, stats };
+    });
+  }, []);
 
   const filteredData = useMemo(() => {
     let data = IRIS_DATA;
@@ -291,17 +528,18 @@ const StatsDashboard: React.FC = () => {
   const StatCard = ({ title, value, icon: Icon }: { title: string; value: number | string; icon: any }) => (
     <motion.div 
       variants={itemVariants}
-      className="bg-white border border-zinc-200 p-6 rounded-xl flex flex-col justify-between"
+      className="bg-white border border-zinc-200 p-6 rounded-xl flex flex-col justify-between group relative"
     >
       <div className="flex items-center justify-between mb-4">
         <div className="p-1.5 rounded bg-zinc-50 border border-zinc-100">
           <Icon className="w-3.5 h-3.5 text-zinc-500" />
         </div>
-        <span className="text-[9px] font-mono font-bold text-zinc-400 uppercase tracking-widest">Amostra</span>
       </div>
       <div>
         <p className="text-2xl font-mono font-bold text-zinc-900 tracking-tight">
-          {typeof value === 'number' ? value.toFixed(4) : value}
+          {typeof value === 'number' 
+            ? (Number.isInteger(value) ? value : value.toFixed(4)) 
+            : value}
         </p>
         <p className="text-[10px] font-sans font-bold text-zinc-500 uppercase tracking-wider mt-1">{title}</p>
       </div>
@@ -457,13 +695,77 @@ const StatsDashboard: React.FC = () => {
               animate="visible"
               className="space-y-10"
             >
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                <StatCard title="Média" value={rawStats.mean} icon={Calculator} />
-                <StatCard title="Mediana" value={rawStats.median} icon={TrendingUp} />
-                <StatCard title="Moda" value={rawStats.mode.length > 0 ? rawStats.mode.join(', ') : 'N/A'} icon={Hash} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+                <StatCard title="Amostras (n)" value={rawStats.count} icon={Hash} />
+                <StatCard 
+                  title="Média" 
+                  value={rawStats.mean} 
+                  icon={Calculator} 
+                />
+                <StatCard 
+                  title="Mediana" 
+                  value={rawStats.median} 
+                  icon={TrendingUp} 
+                />
+                <div className="relative">
+                  <StatCard 
+                    title="Moda" 
+                    value={rawStats.mode.length > 0 ? rawStats.mode.join(', ') : 'N/A'} 
+                    icon={Hash} 
+                  />
+                </div>
                 <StatCard title="Variância" value={rawStats.variance} icon={Layers} />
                 <StatCard title="Desvio Padrão" value={rawStats.stdDev} icon={Maximize2} />
               </div>
+
+              <motion.section 
+                variants={itemVariants}
+                className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden shadow-2xl"
+              >
+                <div className="p-6 bg-zinc-800/50 border-b border-zinc-800 flex justify-between items-center">
+                  <div>
+                    <h2 className="text-lg font-bold text-white italic font-serif">Visualização da Amostra (Dados Brutos)</h2>
+                    <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mt-1">Listagem Individual dos Registros ({SPECIES.find(s => s.value === selectedSpecies)?.label})</p>
+                  </div>
+                  <div className="text-[10px] font-mono text-zinc-500 bg-zinc-900 px-4 py-2 rounded-full border border-zinc-700">
+                    Mostrando {selectedSpecies === 'All' ? 150 : 50} de 150 registros
+                  </div>
+                </div>
+                <div className="max-h-[400px] overflow-y-auto custom-scrollbar bg-zinc-950">
+                  <table className="w-full text-left border-collapse">
+                    <thead className="sticky top-0 bg-zinc-900 z-10">
+                      <tr className="border-b border-zinc-800">
+                        <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest">#</th>
+                        <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Espécie</th>
+                        <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Compr. Sépala</th>
+                        <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Larg. Sépala</th>
+                        <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Compr. Pétala</th>
+                        <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center text-emerald-500">Larg. Pétala</th>
+                      </tr>
+                    </thead>
+                    <tbody className="font-mono text-[11px] text-zinc-400">
+                      {(selectedSpecies === 'All' ? IRIS_DATA : IRIS_DATA.filter(d => d.species === selectedSpecies)).map((row, i) => (
+                        <tr key={i} className="border-b border-zinc-900 hover:bg-zinc-800/20 transition-colors">
+                          <td className="p-4 text-zinc-700 font-bold">{String(i + 1).padStart(3, '0')}</td>
+                          <td className="p-4">
+                            <span className={`px-3 py-1 rounded-lg text-[9px] font-bold uppercase tracking-tighter ${
+                              row.species === 'Iris-setosa' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                              row.species === 'Iris-versicolor' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                              'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+                            }`}>
+                              {row.species.replace('Iris-', '')}
+                            </span>
+                          </td>
+                          <td className="p-4 text-center">{row.sepalLength.toFixed(1)}</td>
+                          <td className="p-4 text-center">{row.sepalWidth.toFixed(1)}</td>
+                          <td className="p-4 text-center">{row.petalLength.toFixed(1)}</td>
+                          <td className="p-4 text-center font-bold text-zinc-300">{row.petalWidth.toFixed(1)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </motion.section>
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <motion.section 
@@ -576,29 +878,35 @@ const StatsDashboard: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 gap-6">
-                <motion.div variants={itemVariants} className="bg-white rounded-xl border border-zinc-200 overflow-hidden">
-                  <div className="p-4 bg-zinc-50 border-b border-zinc-200 flex justify-between items-center">
-                    <h3 className="text-[10px] font-bold uppercase tracking-widest">Tabela de Frequência (Não Agrupada)</h3>
+                <motion.div variants={itemVariants} className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden shadow-2xl">
+                  <div className="p-6 bg-zinc-800/50 border-b border-zinc-800 flex justify-between items-center">
+                    <div>
+                      <h3 className="text-sm font-bold uppercase tracking-widest text-white">Tabela de Frequência (Não Agrupada)</h3>
+                      <p className="text-[9px] font-mono text-zinc-500 mt-1">Valores discretos e suas ocorrências</p>
+                    </div>
+                    <div className="p-2 rounded-lg bg-zinc-900 border border-zinc-700">
+                      <Hash className="w-3 h-3 text-zinc-500" />
+                    </div>
                   </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="border-b border-zinc-100 bg-zinc-50/50">
-                          <th className="p-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Valor (xi)</th>
-                          <th className="p-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Freq (fi)</th>
-                          <th className="p-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Relativa (fri)</th>
-                          <th className="p-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Acumulada (Fi)</th>
-                          <th className="p-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Precisão (E)</th>
+                        <tr className="border-b border-zinc-800 bg-zinc-900/50">
+                          <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Valor (xi)</th>
+                          <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Freq (fi)</th>
+                          <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Relativa (fri)</th>
+                          <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Acumulada (Fi)</th>
+                          <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-right">Precisão (E)</th>
                         </tr>
                       </thead>
-                      <tbody className="font-mono text-[11px] text-zinc-600">
+                      <tbody className="font-mono text-[11px] text-zinc-400">
                         {ungroupedTable.map((row, i) => (
-                          <tr key={i} className="border-b border-zinc-50 hover:bg-zinc-50 transition-colors">
-                            <td className="p-3 font-bold text-zinc-900">{row.value.toFixed(1)}</td>
-                            <td className="p-3">{row.fi}</td>
-                            <td className="p-3">{row.fri.toFixed(4)}</td>
-                            <td className="p-3">{row.faci}</td>
-                            <td className="p-3 text-zinc-400">{row.fri.toExponential(4)}</td>
+                          <tr key={i} className="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition-colors">
+                            <td className="p-4 font-bold text-white">{row.value.toFixed(1)}</td>
+                            <td className="p-4 text-center">{row.fi}</td>
+                            <td className="p-4 text-center">{row.fri.toFixed(4)}</td>
+                            <td className="p-4 text-center">{row.faci}</td>
+                            <td className="p-4 text-right text-zinc-600">{row.fri.toExponential(4)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -606,29 +914,35 @@ const StatsDashboard: React.FC = () => {
                   </div>
                 </motion.div>
 
-                <motion.div variants={itemVariants} className="bg-white rounded-xl border border-zinc-200 overflow-hidden">
-                  <div className="p-4 bg-zinc-50 border-b border-zinc-200 flex justify-between items-center">
-                    <h3 className="text-[10px] font-bold uppercase tracking-widest">Tabela de Frequência (Agrupada)</h3>
+                <motion.div variants={itemVariants} className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden shadow-2xl">
+                  <div className="p-6 bg-zinc-800/50 border-b border-zinc-800 flex justify-between items-center">
+                    <div>
+                      <h3 className="text-sm font-bold uppercase tracking-widest text-white">Tabela de Frequência (Agrupada)</h3>
+                      <p className="text-[9px] font-mono text-zinc-500 mt-1">Intervalos de classe calculados via Sturges</p>
+                    </div>
+                    <div className="p-2 rounded-lg bg-zinc-900 border border-zinc-700">
+                      <Layers className="w-3 h-3 text-zinc-500" />
+                    </div>
                   </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="border-b border-zinc-100 bg-zinc-50/50">
-                          <th className="p-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Classe</th>
-                          <th className="p-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Ponto Médio (xi)</th>
-                          <th className="p-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Freq (fi)</th>
-                          <th className="p-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Acumulada (Fi)</th>
-                          <th className="p-3 text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Precisão (E)</th>
+                        <tr className="border-b border-zinc-800 bg-zinc-900/50">
+                          <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Classe</th>
+                          <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Ponto Médio (xi)</th>
+                          <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Freq (fi)</th>
+                          <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Acumulada (Fi)</th>
+                          <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-right">Precisão (E)</th>
                         </tr>
                       </thead>
-                      <tbody className="font-mono text-[11px] text-zinc-600">
+                      <tbody className="font-mono text-[11px] text-zinc-400">
                         {groupedTable.map((row, i) => (
-                          <tr key={i} className="border-b border-zinc-50 hover:bg-zinc-50 transition-colors">
-                            <td className="p-3 font-bold text-zinc-900">{row.label}</td>
-                            <td className="p-3">{row.xi.toFixed(2)}</td>
-                            <td className="p-3">{row.fi}</td>
-                            <td className="p-3">{row.faci}</td>
-                            <td className="p-3 text-zinc-400">{row.xi.toPrecision(6)}</td>
+                          <tr key={i} className="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition-colors">
+                            <td className="p-4 font-bold text-white">{row.label}</td>
+                            <td className="p-4 text-center">{row.xi.toFixed(2)}</td>
+                            <td className="p-4 text-center">{row.fi}</td>
+                            <td className="p-4 text-center">{row.faci}</td>
+                            <td className="p-4 text-right text-zinc-600">{row.xi.toPrecision(6)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -637,6 +951,55 @@ const StatsDashboard: React.FC = () => {
                 </motion.div>
               </div>
             </motion.main>
+
+              <motion.section 
+                variants={itemVariants}
+                className="bg-zinc-900 text-white rounded-xl p-8 border border-zinc-800 mt-12 shadow-2xl"
+              >
+                <div className="mb-10 text-center">
+                  <h2 className="text-2xl font-bold italic font-serif">Relatório de Análise Comparativa</h2>
+                  <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-[0.3em] mt-2">Visão Multidimensional • Dataset Iris</p>
+                </div>
+
+                <div className="space-y-12">
+                  {fullReportStats.map((group, groupIdx) => (
+                    <div key={groupIdx} className="relative">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="h-px flex-1 bg-zinc-800" />
+                        <h3 className="text-xs font-bold uppercase tracking-widest text-emerald-500">{group.label} (N={group.n})</h3>
+                        <div className="h-px flex-1 bg-zinc-800" />
+                      </div>
+                      
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                          <thead>
+                            <tr className="bg-zinc-800/30">
+                              <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Atributo</th>
+                              <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Média</th>
+                              <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Mediana</th>
+                              <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Moda</th>
+                              <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center">Variância</th>
+                              <th className="p-4 text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-right">Desvio Padrão</th>
+                            </tr>
+                          </thead>
+                          <tbody className="font-mono text-[11px] text-zinc-400">
+                            {group.stats.map((stat, i) => (
+                              <tr key={i} className="border-b border-zinc-800/50 hover:bg-zinc-800/20 transition-colors">
+                                <td className="p-4 font-bold text-white">{stat.attrLabel}</td>
+                                <td className="p-4 text-center">{stat.mean.toFixed(2)}</td>
+                                <td className="p-4 text-center">{stat.median.toFixed(2)}</td>
+                                <td className="p-4 text-center text-emerald-400">{stat.mode.join(', ')}</td>
+                                <td className="p-4 text-center">{stat.variance.toFixed(4)}</td>
+                                <td className="p-4 text-right font-bold text-zinc-300">{stat.stdDev.toFixed(4)}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.section>
 
             <footer className="mt-20 border-t border-zinc-100 pt-8 flex justify-between items-center">
               <p className="text-[9px] font-mono text-zinc-400 uppercase tracking-widest">UniFacema • Estatística Aplicada • 2026</p>
